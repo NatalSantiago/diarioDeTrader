@@ -841,18 +841,28 @@
                     }]
                 };
 
-                // Dados para gráfico de linha (evolução do saldo)
+                // ========== CORREÇÃO: GRÁFICO DE EVOLUÇÃO DO SALDO COM PONTO INICIAL ==========
                 const tradesOrdenados = [...tradesFechados].sort((a, b) => new Date(a.dataEntrada) - new Date(b.dataEntrada));
                 let saldoCorrente = config.saldoInicial;
-                const evolucao = tradesOrdenados.map(t => {
+                const evolucao = [];
+                
+                // Adiciona o ponto inicial (saldo inicial) com a data do primeiro trade ou data atual
+                if (tradesOrdenados.length > 0) {
+                    evolucao.push({ data: tradesOrdenados[0].dataEntrada.slice(0,10), saldo: config.saldoInicial });
+                } else {
+                    evolucao.push({ data: new Date().toISOString().slice(0,10), saldo: config.saldoInicial });
+                }
+                
+                tradesOrdenados.forEach(t => {
                     if (t.fechadoCom === 'Lucro') saldoCorrente += t.valor;
                     else saldoCorrente -= t.valor;
-                    return { data: t.dataEntrada ? t.dataEntrada.slice(0,10) : '', saldo: saldoCorrente };
+                    evolucao.push({ data: t.dataEntrada ? t.dataEntrada.slice(0,10) : '', saldo: saldoCorrente });
                 });
+                
                 const datasEvolucao = evolucao.map(e => e.data);
                 const saldosEvolucao = evolucao.map(e => e.saldo);
 
-                // ========== NOVO CÁLCULO DO DRAWDOWN DIÁRIO (LINHA CONTÍNUA) ==========
+                // ========== CÁLCULO DO DRAWDOWN DIÁRIO (LINHA CONTÍNUA) ==========
                 // Obter todas as datas desde o primeiro trade até hoje
                 const diasComTrades = tradesFechados.map(t => t.dataEntrada.slice(0,10)).filter((v, i, a) => a.indexOf(v) === i).sort();
                 let datasDrawdown = [];
