@@ -1,6 +1,7 @@
 # 📓 Diário de Trader - Sistema Completo de Gerenciamento de Trades
 
 <div align="center">
+<span id="diario-de-trader---sistema-completo-de-gerenciamento-de-trades"></span>
 
 # 📊 Diário de Trader - Versão 1.0 - Dashboard Inteligente
 
@@ -194,7 +195,7 @@ O **Diário de Trader** é uma aplicação web completa e intuitiva para traders
 
 #### Opção 1: Usar diretamente o arquivo HTML
 
-1. **Baixe** o arquivo `MEGA-SENA-ULTIMA-ATUALIZACAO.html` (ou renomeie para `diario-trader.html`)
+1. **Baixe** o arquivo `diario-trader.html` (renomeie se necessário)
 2. **Salve** em uma pasta de sua preferência
 3. **Abra** o arquivo com seu navegador (duplo clique)
 
@@ -682,7 +683,7 @@ Todo valor recebido é reinvestido:
 **[⬇️ BAIXAR VERSÃO 1.0](https://github.com/NatalSantiago/DiarioTrader/releases/latest)**
 
 ### Fluxo Recomendado:
-1. **Baixe** o arquivo HTML
+1. **Baixe** o arquivo `diario-trader.html`
 2. **Abra** no navegador
 3. **Configure** sua conta
 4. **Registre** seus trades
