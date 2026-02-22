@@ -9,7 +9,7 @@
 
 *"Registre, analise e evolua com seu diário de trading profissional"*
 
-<img src="diario_trader_logo.png" width="300" height="300" alt="Logo Diário de Trader">
+<img src="LogoDiario.png" width="300" height="300" alt="Logo Diário de Trader">
 
 ---
 
