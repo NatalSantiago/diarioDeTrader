@@ -199,16 +199,6 @@ O **Diário de Trader** é uma aplicação web completa e intuitiva para traders
 2. **Salve** em uma pasta de sua preferência
 3. **Abra** o arquivo com seu navegador (duplo clique)
 
-#### Opção 2: Hospedar localmente (opcional)
-
-Se preferir, pode servir o arquivo com um servidor local:
-
-```bash
-# Usando Python (exemplo)
-python -m http.server 8000
-# Acesse http://localhost:8000
-```
-
 ### ⚙️ Configuração Inicial
 
 <span id="configuracao-inicial"></span>
