@@ -585,13 +585,23 @@
         }
         .dashboard-chart-container {
             position: relative;
-            height: 200px;
+            height: 250px; /* Altura unificada para todos os gráficos */
             width: 100%;
         }
         .dashboard-print-btn {
             display: flex;
             justify-content: flex-end;
             margin-bottom: 1rem;
+        }
+        /* Novo estilo para o container flex dos gráficos inferiores */
+        .dashboard-row-split {
+            display: flex;
+            gap: 1.5rem;
+            width: 100%;
+        }
+        .dashboard-row-split > div {
+            flex: 1;
+            min-width: 0; /* Para evitar overflow */
         }
     </style>
 </head>
@@ -649,10 +659,11 @@
             <div class="filter-item">
                 <label>Período:</label>
                 <select id="filtroPeriodo">
-                    <option value="todos">Todos</option>
+                    <option value="hoje">Hoje</option>
                     <option value="semana">Esta semana</option>
                     <option value="mes">Este mês</option>
                     <option value="periodo">Personalizado</option>
+                    <option value="todos">Todos</option>
                 </select>
             </div>
             <div class="filter-item" id="dataInicioGroup" style="display: none;">
@@ -737,6 +748,15 @@
                 document.getElementById('metaPercentLabel').innerText = config.metaPercent + '%';
                 document.getElementById('ddMaxLabel').innerText = config.ddMax + '%';
                 document.getElementById('ddDiarioLimite').innerText = config.ddDiarioLimite + '%';
+            }
+
+            // ========== FUNÇÃO PARA OBTER DATA LOCAL NO FORMATO YYYY-MM-DD ==========
+            function getLocalDateString() {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
             }
 
             // ========== CONFIG MODAL (compacto) ==========
@@ -850,7 +870,7 @@
                 if (tradesOrdenados.length > 0) {
                     evolucao.push({ data: tradesOrdenados[0].dataEntrada.slice(0,10), saldo: config.saldoInicial });
                 } else {
-                    evolucao.push({ data: new Date().toISOString().slice(0,10), saldo: config.saldoInicial });
+                    evolucao.push({ data: getLocalDateString(), saldo: config.saldoInicial });
                 }
                 
                 tradesOrdenados.forEach(t => {
@@ -923,7 +943,7 @@
                     });
                 }
 
-                // Montar HTML do modal
+                // Montar HTML do modal com novo layout
                 const modalHtml = `
                     <div style="max-height: 80vh; overflow-y: auto; padding: 0.5rem;">
                         <div class="dashboard-print-btn">
@@ -947,23 +967,29 @@
                                 <div class="stat-label">Profit Factor</div>
                             </div>
                         </div>
-                        <div class="dashboard-grid">
+                        <div class="dashboard-grid" style="grid-template-columns: 1fr;">
+                            <!-- Primeira linha: Evolução do Saldo ocupa toda a largura -->
                             <div class="dashboard-card">
                                 <h3>📈 Evolução do Saldo</h3>
                                 <div class="dashboard-chart-container">
                                     <canvas id="chart-evolucao"></canvas>
                                 </div>
                             </div>
+                            <!-- Segunda linha: Resultados e Drawdown Diário lado a lado, dentro do mesmo card -->
                             <div class="dashboard-card">
-                                <h3>🥧 Resultados</h3>
-                                <div class="dashboard-chart-container">
-                                    <canvas id="chart-pizza"></canvas>
-                                </div>
-                            </div>
-                            <div class="dashboard-card" style="grid-column: span 2;">
-                                <h3>📉 Drawdown Diário</h3>
-                                <div class="dashboard-chart-container" style="height: 250px;">
-                                    <canvas id="chart-drawdown"></canvas>
+                                <div class="dashboard-row-split">
+                                    <div>
+                                        <h3>🥧 Resultados</h3>
+                                        <div class="dashboard-chart-container">
+                                            <canvas id="chart-pizza"></canvas>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3>📉 Drawdown Diário</h3>
+                                        <div class="dashboard-chart-container">
+                                            <canvas id="chart-drawdown"></canvas>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1093,6 +1119,7 @@
                     </style>
                 `;
 
+                // Novo layout para impressão: primeiro gráfico de evolução em linha única, depois resultados e drawdown lado a lado
                 const html = `
                     <!DOCTYPE html>
                     <html>
@@ -1106,21 +1133,23 @@
                             <div class="stat-item"><div class="stat-value">${profitFactor}</div><div class="stat-label">Profit Factor</div></div>
                         </div>
 
+                        <!-- Primeira linha: Evolução do Saldo ocupando toda largura -->
                         <div class="chart-row">
-                            <div class="chart-box">
+                            <div class="chart-box" style="flex: 1 1 100%;">
                                 <h3>📈 Evolução do Saldo</h3>
-                                <img src="${evolucaoURL}" alt="Evolução do Saldo">
+                                <img src="${evolucaoURL}" alt="Evolução do Saldo" style="max-height: 160px;">
                             </div>
+                        </div>
+
+                        <!-- Segunda linha: Resultados e Drawdown lado a lado -->
+                        <div class="chart-row">
                             <div class="chart-box">
                                 <h3>🥧 Resultados</h3>
                                 <img src="${pizzaURL}" alt="Resultados">
                             </div>
-                        </div>
-
-                        <div class="chart-row">
-                            <div class="chart-box" style="flex: 1 1 100%;">
+                            <div class="chart-box">
                                 <h3>📉 Drawdown Diário</h3>
-                                <img src="${drawdownURL}" alt="Drawdown Diário" style="max-height: 160px;">
+                                <img src="${drawdownURL}" alt="Drawdown Diário">
                             </div>
                         </div>
 
@@ -1144,7 +1173,7 @@
             // ========== ESTADO GLOBAL ==========
             const STORAGE_KEY = 'traderDiarioTrades';
             let trades = [];
-            let filtroPeriodo = 'todos';
+            let filtroPeriodo = 'hoje'; // padrão alterado para 'hoje'
             let filtroStatus = 'todos';
             let dataInicioFiltro = '';
             let dataFimFiltro = '';
@@ -1960,7 +1989,10 @@
                     const hoje = new Date();
                     let inicio, fim;
 
-                    if (filtroPeriodo === 'semana') {
+                    if (filtroPeriodo === 'hoje') {
+                        inicio = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+                        fim = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate(), 23, 59, 59);
+                    } else if (filtroPeriodo === 'semana') {
                         const diaSemana = hoje.getDay();
                         inicio = new Date(hoje);
                         inicio.setDate(hoje.getDate() - diaSemana + (diaSemana === 0 ? -6 : 1));
@@ -1995,7 +2027,8 @@
                 }
 
                 let descricao = [];
-                if (filtroPeriodo === 'semana') descricao.push('esta semana');
+                if (filtroPeriodo === 'hoje') descricao.push('hoje');
+                else if (filtroPeriodo === 'semana') descricao.push('esta semana');
                 else if (filtroPeriodo === 'mes') descricao.push('este mês');
                 else if (filtroPeriodo === 'periodo') descricao.push('período');
                 
@@ -2014,13 +2047,13 @@
             // ========== ATUALIZAR MÉTRICAS ==========
             function atualizarMetricas() {
                 let totalPos = 0, totalNeg = 0, tradesHoje = 0, posHoje = 0, negHoje = 0;
-                const hoje = new Date().toISOString().slice(0,10);
+                const hojeStr = getLocalDateString(); // usa data local
 
                 trades.forEach(t => {
                     if (t.fechadoCom === 'Lucro') totalPos++;
                     else if (t.fechadoCom === 'Prejuizo') totalNeg++;
 
-                    if (t.dataEntrada && t.dataEntrada.slice(0,10) === hoje) {
+                    if (t.dataEntrada && t.dataEntrada.slice(0,10) === hojeStr) {
                         tradesHoje++;
                         if (t.fechadoCom === 'Lucro') posHoje++;
                         else if (t.fechadoCom === 'Prejuizo') negHoje++;
@@ -2089,13 +2122,13 @@
                 ddMaxEl.innerText = ddExibido > 0 ? `${ddExibidoFixed}%` : '0%';
 
                 // ========== DRAWDOWN DIÁRIO = maior queda intradiária ==========
-                const saldoAberturaHoje = config.saldoInicial + trades.filter(t => t.dataEntrada && t.dataEntrada.slice(0,10) < hoje).reduce((acc, t) => {
+                const saldoAberturaHoje = config.saldoInicial + trades.filter(t => t.dataEntrada && t.dataEntrada.slice(0,10) < hojeStr).reduce((acc, t) => {
                     return acc + (t.fechadoCom === 'Lucro' ? t.valor : (t.fechadoCom === 'Prejuizo' ? -t.valor : 0));
                 }, 0);
 
                 // Obter trades de hoje ordenados por data
                 const tradesHojeOrdenados = trades
-                    .filter(t => t.dataEntrada && t.dataEntrada.slice(0,10) === hoje)
+                    .filter(t => t.dataEntrada && t.dataEntrada.slice(0,10) === hojeStr)
                     .sort((a, b) => new Date(a.dataEntrada) - new Date(b.dataEntrada));
 
                 // Simular saldo ao longo do dia para achar o menor valor
@@ -2207,10 +2240,16 @@
             // Inicialização
             carregarConfig();
             carregarTrades();
+            // Aplicar filtro padrão (hoje) e renderizar
+            filtroPeriodoSelect.value = 'hoje'; // seleciona a opção Hoje
+            filtroPeriodo = 'hoje'; // atualiza variável global
+            // Forçar ocultação dos campos de data personalizada (já que não é período)
+            dataInicioGroup.style.display = 'none';
+            dataFimGroup.style.display = 'none';
             renderTrades();
             atualizarMetricas();
 
-            const hojeStr = new Date().toISOString().slice(0,10);
+            const hojeStr = getLocalDateString();
             dataInicio.value = hojeStr;
             dataFim.value = hojeStr;
         })();
