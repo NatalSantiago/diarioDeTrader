@@ -1065,7 +1065,6 @@
                 if (metaAtingida) {
                     metaStatusText.innerText = '✅';
                     metaStatusText.style.color = 'var(--success)';
-                    metaFaltaEl.innerText = '✅ ' + formatarMoeda(0).substring(3); // "U$ 0,00" sem o U$?
                     metaFaltaEl.innerText = formatarMoeda(0); // usa a função
                     metaFaltaEl.style.color = 'var(--success)';
                     progressMetaEl.innerText = '🎉 Meta atingida!';
@@ -1912,8 +1911,8 @@
                 };
             }
 
-            // ========== DASHBOARD MODAL ==========
-            let chartEvolucao, chartPizza, chartDrawdown;
+            // ========== DASHBOARD MODAL (ATUALIZADO COM MAIS GRÁFICOS) ==========
+            let chartEvolucao, chartPizza, chartDrawdown, chartMoeda, chartDiaSemana, chartHora, chartResultadoDiario;
 
             document.getElementById('dashboardButton').addEventListener('click', () => {
                 abrirDashboard();
@@ -1922,6 +1921,7 @@
             function abrirDashboard() {
                 const tradesFechados = trades.filter(t => t.fechadoCom);
                 
+                // Estatísticas gerais
                 const totalTrades = tradesFechados.length;
                 const lucros = tradesFechados.filter(t => t.fechadoCom === 'Lucro');
                 const prejuizos = tradesFechados.filter(t => t.fechadoCom === 'Prejuizo');
@@ -1931,6 +1931,13 @@
                 const winRate = totalTrades ? (lucros.length / totalTrades * 100).toFixed(1) : 0;
                 const profitFactor = totalPrejuizo > 0 ? (totalLucro / totalPrejuizo).toFixed(2) : totalLucro > 0 ? '∞' : '0';
 
+                // Estatísticas adicionais (corrigido: remover .toFixed() para manter como número)
+                const maiorLucro = lucros.length ? Math.max(...lucros.map(t => t.valor)) : 0;
+                const maiorPrejuizo = prejuizos.length ? Math.min(...prejuizos.map(t => t.valor)) : 0;
+                const mediaLucro = lucros.length ? (totalLucro / lucros.length) : 0; // agora é número
+                const mediaPrejuizo = prejuizos.length ? (totalPrejuizo / prejuizos.length) : 0; // número
+
+                // Dados para gráfico de pizza de lucros/prejuízos
                 const pizzaData = {
                     labels: ['Lucros', 'Prejuízos'],
                     datasets: [{
@@ -1941,6 +1948,7 @@
                     }]
                 };
 
+                // Evolução do saldo (linha)
                 const tradesOrdenados = [...tradesFechados].sort((a, b) => new Date(a.dataEntrada) - new Date(b.dataEntrada));
                 let saldoCorrente = config.saldoInicial;
                 const evolucao = [];
@@ -1960,6 +1968,7 @@
                 const datasEvolucao = evolucao.map(e => e.data);
                 const saldosEvolucao = evolucao.map(e => e.saldo);
 
+                // Drawdown diário (linha)
                 const diasComTrades = tradesFechados.map(t => t.dataEntrada.slice(0,10)).filter((v, i, a) => a.indexOf(v) === i).sort();
                 let datasDrawdown = [];
                 let valoresDrawdown = [];
@@ -2011,11 +2020,55 @@
                     });
                 }
 
+                // --- NOVOS GRÁFICOS ---
+
+                // 1. Distribuição por moeda (pizza)
+                const moedaCount = {};
+                tradesFechados.forEach(t => {
+                    moedaCount[t.moeda] = (moedaCount[t.moeda] || 0) + 1;
+                });
+                const moedaLabels = Object.keys(moedaCount);
+                const moedaData = Object.values(moedaCount);
+
+                // 2. Distribuição por dia da semana (barras) - apenas trades fechados
+                const diasSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+                const diaCount = [0, 0, 0, 0, 0, 0, 0];
+                tradesFechados.forEach(t => {
+                    const data = new Date(t.dataEntrada);
+                    const dia = data.getDay(); // 0=domingo
+                    diaCount[dia]++;
+                });
+
+                // 3. Distribuição por hora do dia (barras)
+                const horaCount = new Array(24).fill(0);
+                tradesFechados.forEach(t => {
+                    const data = new Date(t.dataEntrada);
+                    const hora = data.getHours();
+                    horaCount[hora]++;
+                });
+
+                // 4. Resultado diário (barras) - últimos 30 dias ou todos os dias com trade
+                const resultadoPorDia = {};
+                tradesFechados.forEach(t => {
+                    const dia = t.dataEntrada.slice(0,10);
+                    if (!resultadoPorDia[dia]) resultadoPorDia[dia] = 0;
+                    resultadoPorDia[dia] += t.fechadoCom === 'Lucro' ? t.valor : -t.valor;
+                });
+                // Ordenar por data
+                const diasOrdenados = Object.keys(resultadoPorDia).sort();
+                const valoresDiarios = diasOrdenados.map(d => resultadoPorDia[d]);
+                // Limitar a últimos 30 dias para não poluir
+                const diasExibir = diasOrdenados.slice(-30);
+                const valoresExibir = valoresDiarios.slice(-30);
+
+                // Montagem do HTML do modal
                 const modalHtml = `
                     <div style="max-height: 80vh; overflow-y: auto; padding: 0.5rem;">
                         <div class="dashboard-print-btn">
                             <button class="modal-btn-print" id="dashboard-imprimir">🖨️ Imprimir Dashboard</button>
                         </div>
+                        
+                        <!-- Cards de estatísticas gerais -->
                         <div class="dashboard-stats">
                             <div class="stat-item">
                                 <div class="stat-value">${totalTrades}</div>
@@ -2034,6 +2087,28 @@
                                 <div class="stat-label">Profit Factor</div>
                             </div>
                         </div>
+                        
+                        <!-- Cards de estatísticas adicionais -->
+                        <div class="dashboard-stats" style="margin-top: 0.5rem;">
+                            <div class="stat-item">
+                                <div class="stat-value">${formatarMoeda(maiorLucro)}</div>
+                                <div class="stat-label">Maior Lucro</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${formatarMoeda(Math.abs(maiorPrejuizo))}</div>
+                                <div class="stat-label">Maior Prejuízo</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${formatarMoeda(mediaLucro)}</div>
+                                <div class="stat-label">Média Lucro</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${formatarMoeda(mediaPrejuizo)}</div>
+                                <div class="stat-label">Média Prejuízo</div>
+                            </div>
+                        </div>
+
+                        <!-- Gráficos originais -->
                         <div class="dashboard-grid" style="grid-template-columns: 1fr;">
                             <div class="dashboard-card">
                                 <h3>📈 Evolução do Saldo</h3>
@@ -2058,6 +2133,37 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Novos gráficos -->
+                        <div class="dashboard-grid" style="grid-template-columns: repeat(2, 1fr); margin-top: 1rem;">
+                            <div class="dashboard-card">
+                                <h3>💰 Distribuição por Moeda</h3>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chart-moeda"></canvas>
+                                </div>
+                            </div>
+                            <div class="dashboard-card">
+                                <h3>📅 Distribuição por Dia da Semana</h3>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chart-diasemana"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-grid" style="grid-template-columns: repeat(2, 1fr); margin-top: 1rem;">
+                            <div class="dashboard-card">
+                                <h3>⏰ Distribuição por Hora</h3>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chart-hora"></canvas>
+                                </div>
+                            </div>
+                            <div class="dashboard-card">
+                                <h3>📊 Resultado Diário (últimos 30 dias)</h3>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chart-resultadodiario"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 `;
 
@@ -2070,6 +2176,7 @@
                     color: 'var(--text-primary)',
                     customClass: { popup: 'dashboard-modal' },
                     didOpen: () => {
+                        // Gráfico de evolução
                         const ctxEvolucao = document.getElementById('chart-evolucao').getContext('2d');
                         chartEvolucao = new Chart(ctxEvolucao, {
                             type: 'line',
@@ -2096,6 +2203,7 @@
                             }
                         });
 
+                        // Gráfico de pizza (lucros/prejuízos)
                         const ctxPizza = document.getElementById('chart-pizza').getContext('2d');
                         chartPizza = new Chart(ctxPizza, {
                             type: 'doughnut',
@@ -2110,6 +2218,7 @@
                             }
                         });
 
+                        // Gráfico de drawdown diário
                         const ctxDrawdown = document.getElementById('chart-drawdown').getContext('2d');
                         chartDrawdown = new Chart(ctxDrawdown, {
                             type: 'line',
@@ -2136,51 +2245,164 @@
                             }
                         });
 
-                        chartEvolucao.update();
-                        chartPizza.update();
-                        chartDrawdown.update();
+                        // Gráfico de distribuição por moeda
+                        const ctxMoeda = document.getElementById('chart-moeda').getContext('2d');
+                        chartMoeda = new Chart(ctxMoeda, {
+                            type: 'pie',
+                            data: {
+                                labels: moedaLabels,
+                                datasets: [{
+                                    data: moedaData,
+                                    backgroundColor: [
+                                        '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
+                                        '#ec4899', '#14b8a6', '#f97316', '#6366f1', '#84cc16'
+                                    ],
+                                    borderColor: 'var(--border)',
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                animation: false,
+                                plugins: {
+                                    legend: { position: 'bottom', labels: { color: 'var(--text-primary)' } }
+                                }
+                            }
+                        });
 
+                        // Gráfico de distribuição por dia da semana
+                        const ctxDiaSemana = document.getElementById('chart-diasemana').getContext('2d');
+                        chartDiaSemana = new Chart(ctxDiaSemana, {
+                            type: 'bar',
+                            data: {
+                                labels: diasSemana,
+                                datasets: [{
+                                    label: 'Quantidade de trades',
+                                    data: diaCount,
+                                    backgroundColor: '#3b82f6',
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                animation: false,
+                                plugins: { legend: { display: false } },
+                                scales: {
+                                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' } },
+                                    x: { grid: { display: false } }
+                                }
+                            }
+                        });
+
+                        // Gráfico de distribuição por hora
+                        const ctxHora = document.getElementById('chart-hora').getContext('2d');
+                        chartHora = new Chart(ctxHora, {
+                            type: 'bar',
+                            data: {
+                                labels: Array.from({ length: 24 }, (_, i) => i + 'h'),
+                                datasets: [{
+                                    label: 'Trades por hora',
+                                    data: horaCount,
+                                    backgroundColor: '#f59e0b',
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                animation: false,
+                                plugins: { legend: { display: false } },
+                                scales: {
+                                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' } },
+                                    x: { grid: { display: false } }
+                                }
+                            }
+                        });
+
+                        // Gráfico de resultado diário
+                        const ctxResultadoDiario = document.getElementById('chart-resultadodiario').getContext('2d');
+                        chartResultadoDiario = new Chart(ctxResultadoDiario, {
+                            type: 'bar',
+                            data: {
+                                labels: diasExibir,
+                                datasets: [{
+                                    label: 'Resultado (U$)',
+                                    data: valoresExibir,
+                                    backgroundColor: valoresExibir.map(v => v >= 0 ? '#10b981' : '#ef4444'),
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                animation: false,
+                                plugins: { legend: { display: false } },
+                                scales: {
+                                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' } },
+                                    x: { grid: { display: false } }
+                                }
+                            }
+                        });
+
+                        // Botão de impressão (agora com todos os dados e gráficos, exceto resultado diário)
                         document.getElementById('dashboard-imprimir').addEventListener('click', () => {
-                            setTimeout(() => {
-                                imprimirDashboard(
-                                    totalTrades, winRate, lucroLiquido, profitFactor,
-                                    datasEvolucao, saldosEvolucao,
-                                    lucros.length, prejuizos.length,
-                                    datasDrawdown, valoresDrawdown
-                                );
-                            }, 300);
+                            // Capturar imagens de todos os gráficos (exceto resultado diário)
+                            const evolucaoURL = chartEvolucao.toBase64Image();
+                            const pizzaURL = chartPizza.toBase64Image();
+                            const drawdownURL = chartDrawdown.toBase64Image();
+                            const moedaURL = chartMoeda.toBase64Image();
+                            const diaSemanaURL = chartDiaSemana.toBase64Image();
+                            const horaURL = chartHora.toBase64Image();
+                            // resultadoDiarioURL NÃO é incluído
+
+                            // Chamar função de impressão com os gráficos selecionados
+                            imprimirDashboardCompleto(
+                                totalTrades, winRate, lucroLiquido, profitFactor,
+                                maiorLucro, maiorPrejuizo, mediaLucro, mediaPrejuizo,
+                                evolucaoURL, pizzaURL, drawdownURL,
+                                moedaURL, diaSemanaURL, horaURL
+                                // sem resultadoDiarioURL
+                            );
                         });
                     }
                 });
             }
 
-            function imprimirDashboard(totalTrades, winRate, lucroLiquido, profitFactor, datasEvolucao, saldosEvolucao, totalLucro, totalPrejuizo, datasDrawdown, valoresDrawdown) {
-                const evolucaoURL = chartEvolucao.toBase64Image();
-                const pizzaURL = chartPizza.toBase64Image();
-                const drawdownURL = chartDrawdown.toBase64Image();
-
+            // Função de impressão que inclui apenas os gráficos desejados (sem resultado diário)
+            function imprimirDashboardCompleto(
+                totalTrades, winRate, lucroLiquido, profitFactor,
+                maiorLucro, maiorPrejuizo, mediaLucro, mediaPrejuizo,
+                evolucaoURL, pizzaURL, drawdownURL,
+                moedaURL, diaSemanaURL, horaURL
+            ) {
                 const estilo = `
                     <style>
                         @page { size: landscape; margin: 0.8cm; }
                         body { font-family: 'Inter', sans-serif; padding: 0; color: #000; background: #fff; margin: 0; font-size: 12px; }
-                        h1 { color: #2563eb; margin-bottom: 0.3rem; font-size: 1.5rem; text-align: center; }
+                        h1 { color: #2563eb; margin-bottom: 0.3rem; font-size: 1.8rem; text-align: center; }
                         .stats-grid { display: flex; gap: 1rem; justify-content: center; margin-bottom: 0.5rem; flex-wrap: wrap; }
                         .stat-item { text-align: center; min-width: 100px; }
                         .stat-value { font-size: 1.2rem; font-weight: 600; color: #2563eb; }
                         .stat-label { font-size: 0.6rem; text-transform: uppercase; color: #4b5563; }
-                        .chart-row { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 0.5rem; }
-                        .chart-box { flex: 1 1 300px; text-align: center; }
-                        .chart-box img { max-width: 100%; height: auto; max-height: 150px; object-fit: contain; }
+                        .chart-row { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 0.8rem; }
+                        .chart-box { flex: 1 1 300px; text-align: center; border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 0.5rem; background: #f9fafb; }
+                        .chart-box img { max-width: 100%; height: auto; max-height: 160px; object-fit: contain; }
+                        .chart-box h3 { margin: 0 0 0.3rem 0; font-size: 0.9rem; color: #1e293b; }
                         .footer { margin-top: 0.5rem; text-align: right; color: #6b7280; font-size: 0.6rem; }
+                        .page-break { page-break-before: always; }
                     </style>
                 `;
 
                 const html = `
                     <!DOCTYPE html>
                     <html>
-                    <head><title>Dashboard de Performance</title>${estilo}</head>
+                    <head><title>Dashboard Completo</title>${estilo}</head>
                     <body>
                         <h1>📊 Dashboard de Performance</h1>
+                        
+                        <!-- Cards gerais -->
                         <div class="stats-grid">
                             <div class="stat-item"><div class="stat-value">${totalTrades}</div><div class="stat-label">Total Trades</div></div>
                             <div class="stat-item"><div class="stat-value">${winRate}%</div><div class="stat-label">Win Rate</div></div>
@@ -2188,22 +2410,26 @@
                             <div class="stat-item"><div class="stat-value">${profitFactor}</div><div class="stat-label">Profit Factor</div></div>
                         </div>
 
-                        <div class="chart-row">
-                            <div class="chart-box" style="flex: 1 1 100%;">
-                                <h3>📈 Evolução do Saldo</h3>
-                                <img src="${evolucaoURL}" alt="Evolução do Saldo" style="max-height: 160px;">
-                            </div>
+                        <!-- Cards adicionais -->
+                        <div class="stats-grid">
+                            <div class="stat-item"><div class="stat-value">${formatarMoeda(maiorLucro)}</div><div class="stat-label">Maior Lucro</div></div>
+                            <div class="stat-item"><div class="stat-value">${formatarMoeda(Math.abs(maiorPrejuizo))}</div><div class="stat-label">Maior Prejuízo</div></div>
+                            <div class="stat-item"><div class="stat-value">${formatarMoeda(mediaLucro)}</div><div class="stat-label">Média Lucro</div></div>
+                            <div class="stat-item"><div class="stat-value">${formatarMoeda(mediaPrejuizo)}</div><div class="stat-label">Média Prejuízo</div></div>
                         </div>
 
+                        <!-- Primeira linha de gráficos -->
                         <div class="chart-row">
-                            <div class="chart-box">
-                                <h3>🥧 Resultados</h3>
-                                <img src="${pizzaURL}" alt="Resultados">
-                            </div>
-                            <div class="chart-box">
-                                <h3>📉 Drawdown Diário</h3>
-                                <img src="${drawdownURL}" alt="Drawdown Diário">
-                            </div>
+                            <div class="chart-box"><h3>📈 Evolução do Saldo</h3><img src="${evolucaoURL}" alt="Evolução"></div>
+                            <div class="chart-box"><h3>🥧 Resultados</h3><img src="${pizzaURL}" alt="Resultados"></div>
+                            <div class="chart-box"><h3>📉 Drawdown Diário</h3><img src="${drawdownURL}" alt="Drawdown"></div>
+                        </div>
+
+                        <!-- Segunda linha de gráficos -->
+                        <div class="chart-row">
+                            <div class="chart-box"><h3>💰 Distribuição por Moeda</h3><img src="${moedaURL}" alt="Moeda"></div>
+                            <div class="chart-box"><h3>📅 Dia da Semana</h3><img src="${diaSemanaURL}" alt="Dia Semana"></div>
+                            <div class="chart-box"><h3>⏰ Distribuição por Hora</h3><img src="${horaURL}" alt="Hora"></div>
                         </div>
 
                         <div class="footer">
@@ -2216,8 +2442,7 @@
                 const printWindow = window.open('', '_blank');
                 printWindow.document.write(html);
                 printWindow.document.close();
-                
-                printWindow.onload = function() {
+                printWindow.onload = () => {
                     printWindow.focus();
                     printWindow.print();
                 };

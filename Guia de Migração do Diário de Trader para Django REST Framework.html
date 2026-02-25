@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Migração - Diário de Trader para Django REST Framework</title>
+    <style>
+        /* Tema Dark */
+        body {
+            background-color: #0a0c12;
+            color: #f0f4fa;
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        h1, h2, h3 {
+            color: #3b82f6;
+            border-bottom: 1px solid #2a313e;
+            padding-bottom: 8px;
+        }
+        h1 {
+            font-size: 2.2rem;
+            text-align: center;
+            border-bottom: 2px solid #3b82f6;
+        }
+        a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        code, pre {
+            font-family: 'Fira Code', 'Courier New', monospace;
+            background-color: #1a1f29;
+            border-radius: 6px;
+            color: #f0f4fa;
+        }
+        code {
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+        pre {
+            padding: 15px;
+            overflow-x: auto;
+            border: 1px solid #2a313e;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .step {
+            background-color: #14181f;
+            border: 1px solid #2a313e;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+        .step h3 {
+            margin-top: 0;
+            color: #f0f4fa;
+            border-bottom: 1px solid #3b82f6;
+            padding-bottom: 5px;
+        }
+        .note, .warning {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid;
+        }
+        .note {
+            background-color: #1e293b;
+            border-left-color: #3b82f6;
+        }
+        .warning {
+            background-color: #2d1a1a;
+            border-left-color: #ef4444;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #1a1f29;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            border: 1px solid #2a313e;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #1e232c;
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        td {
+            color: #f0f4fa;
+        }
+        .badge {
+            background-color: #3b82f6;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #2a313e;
+            margin: 30px 0;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #9aa8b9;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📘 Guia de Migração do Diário de Trader para Django REST Framework</h1>
+        <p style="text-align: center; color: #9aa8b9;">Versão 2.0 - Tema Dark | Passo a passo completo com autenticação, planos de assinatura e limites</p>
+
+        <div class="note">
+            <strong>⚠️ Pré-requisitos:</strong> Python 3.8+, conhecimento básico de Django, terminal, e seu frontend atual (HTML/CSS/JS) pronto.
+        </div>
+
+        <!-- Índice -->
+        <h2>📑 Índice</h2>
+        <ul style="columns: 2; list-style: none; padding: 0;">
+            <li>1. <a href="#configuracao-inicial">Configuração Inicial</a></li>
+            <li>2. <a href="#settings">Configurações do Django (settings.py)</a></li>
+            <li>3. <a href="#modelos">Modelos (em português)</a></li>
+            <li>4. <a href="#migracoes">Criar as migrações</a></li>
+            <li>5. <a href="#planos">Popular os planos</a></li>
+            <li>6. <a href="#serializers">Serializers</a></li>
+            <li>7. <a href="#permissoes">Permissões personalizadas</a></li>
+            <li>8. <a href="#views">Views (ViewSets)</a></li>
+            <li>9. <a href="#urls">URLs</a></li>
+            <li>10. <a href="#frontend">Servir o frontend</a></li>
+            <li>11. <a href="#pagamento">Integração com pagamento</a></li>
+            <li>12. <a href="#frontend-api">Adaptando o frontend</a></li>
+            <li>13. <a href="#limites">Verificação de limites</a></li>
+            <li>14. <a href="#deploy">Deploy</a></li>
+        </ul>
+
+        <hr>
+
+        <!-- 1. Configuração Inicial -->
+        <section id="configuracao-inicial">
+            <div class="step">
+                <h3>📦 1. Configuração Inicial</h3>
+                <p>Crie um ambiente virtual e instale as dependências:</p>
+                <pre><code>python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+
+pip install django djangorestframework djangorestframework-simplejwt django-cors-headers</code></pre>
+
+                <p>Crie o projeto e o app:</p>
+                <pre><code>django-admin startproject diario_backend
+cd diario_backend
+python manage.py startapp api</code></pre>
+            </div>
+        </section>
+
+        <!-- 2. Settings -->
+        <section id="settings">
+            <div class="step">
+                <h3>⚙️ 2. Configurações do Django (settings.py)</h3>
+                <p>Edite <code>diario_backend/settings.py</code>:</p>
+                <pre><code>import os
+from datetime import timedelta
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'corsheaders',
+    'api',
+]
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:5500",
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+LANGUAGE_CODE = 'pt-br'
+TIME_ZONE = 'America/Sao_Paulo'
+USE_I18N = True
+USE_TZ = True
+
+STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'</code></pre>
+            </div>
+        </section>
+
+        <!-- 3. Modelos -->
+        <section id="modelos">
+            <div class="step">
+                <h3>📄 3. Modelos (em português)</h3>
+                <p>Edite <code>api/models.py</code>:</p>
+                <pre><code>from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+
+class Plano(models.Model):
+    nome = models.CharField(max_length=50, unique=True)
+    preco = models.DecimalField(max_digits=10, decimal_places=2)
+    max_contas = models.IntegerField(default=1, help_text="Número máximo de contas permitidas (0 = ilimitado)")
+    max_trades = models.IntegerField(default=50, help_text="Número máximo de trades por conta (0 = ilimitado)")
+    dias_acesso = models.IntegerField(default=30, help_text="Dias de acesso (0 = vitalício)")
+
+    def __str__(self):
+        return self.nome
+
+class Assinatura(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assinaturas')
+    plano = models.ForeignKey(Plano, on_delete=models.PROTECT)
+    data_inicio = models.DateTimeField(default=timezone.now)
+    data_expiracao = models.DateTimeField(null=True, blank=True)
+    ativa = models.BooleanField(default=True)
+
+    def save(self, *args, **kwargs):
+        if self.plano.dias_acesso > 0 and not self.data_expiracao:
+            self.data_expiracao = self.data_inicio + timezone.timedelta(days=self.plano.dias_acesso)
+        super().save(*args, **kwargs)
+
+    def esta_ativa(self):
+        if not self.ativa:
+            return False
+        if self.data_expiracao and self.data_expiracao < timezone.now():
+            return False
+        return True
+
+class Conta(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='contas')
+    nome = models.CharField(max_length=100)
+    saldo_inicial = models.DecimalField(max_digits=12, decimal_places=2)
+    meta_percentual = models.DecimalField(max_digits=5, decimal_places=2)
+    dd_tipo = models.CharField(max_length=20, choices=[('estatico', 'Estático'), ('dinamico', 'Dinâmico')])
+    dd_max = models.DecimalField(max_digits=5, decimal_places=2)
+    dd_diario_limite = models.DecimalField(max_digits=5, decimal_places=2)
+    criada_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-criada_em']
+
+    def __str__(self):
+        return f"{self.nome} - {self.usuario.username}"
+
+class Trade(models.Model):
+    conta = models.ForeignKey(Conta, on_delete=models.CASCADE, related_name='trades')
+    moeda = models.CharField(max_length=10)
+    data_entrada = models.DateTimeField()
+    tipo_entrada = models.CharField(max_length=10, choices=[('Compra', 'Compra'), ('Venda', 'Venda')])
+    preco_entrada = models.DecimalField(max_digits=12, decimal_places=5, null=True, blank=True)
+    stop_loss = models.DecimalField(max_digits=12, decimal_places=5, null=True, blank=True)
+    take_profit = models.DecimalField(max_digits=12, decimal_places=5, null=True, blank=True)
+    lote = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    obs_abertura = models.TextField(blank=True)
+    sentimento_abertura = models.CharField(max_length=30, blank=True)
+    fechado_com = models.CharField(max_length=20, blank=True, choices=[('Lucro', 'Lucro'), ('Prejuizo', 'Prejuízo')])
+    valor = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    data_fechamento = models.DateTimeField(null=True, blank=True)
+    obs_fechamento = models.TextField(blank=True)
+    sentimento_fechamento = models.CharField(max_length=30, blank=True)
+    img_entrada_base64 = models.TextField(blank=True)
+    img_entrada_nome = models.CharField(max_length=255, blank=True)
+    img_fechamento_base64 = models.TextField(blank=True)
+    img_fechamento_nome = models.CharField(max_length=255, blank=True)
+
+    class Meta:
+        ordering = ['-data_entrada']
+
+    def __str__(self):
+        return f"{self.moeda} - {self.data_entrada}"</code></pre>
+            </div>
+        </section>
+
+        <!-- 4. Migrações -->
+        <section id="migracoes">
+            <div class="step">
+                <h3>🔑 4. Criar as migrações e aplicar</h3>
+                <pre><code>python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser</code></pre>
+            </div>
+        </section>
+
+        <!-- 5. Popular planos -->
+        <section id="planos">
+            <div class="step">
+                <h3>💳 5. Popular os planos</h3>
+                <p>Crie a estrutura de diretórios:</p>
+                <pre><code>mkdir -p api/management/commands
+touch api/management/commands/criar_planos.py</code></pre>
+                <p>Edite <code>api/management/commands/criar_planos.py</code>:</p>
+                <pre><code>from django.core.management.base import BaseCommand
+from api.models import Plano
+
+class Command(BaseCommand):
+    help = 'Cria os planos de assinatura'
+
+    def handle(self, *args, **options):
+        planos = [
+            {'nome': 'Básico (50 trades, 1 conta)', 'preco': 29.90, 'max_trades': 50, 'max_contas': 1, 'dias_acesso': 30},
+            {'nome': 'Intermediário (150 trades, 1 conta)', 'preco': 59.90, 'max_trades': 150, 'max_contas': 1, 'dias_acesso': 30},
+            {'nome': 'Avançado (trades ilimitados, 1 conta)', 'preco': 89.90, 'max_trades': 0, 'max_contas': 1, 'dias_acesso': 30},
+            {'nome': 'Profissional (trades ilimitados, contas ilimitadas)', 'preco': 149.90, 'max_trades': 0, 'max_contas': 0, 'dias_acesso': 30},
+            {'nome': 'Vitalício (tudo ilimitado)', 'preco': 497.00, 'max_trades': 0, 'max_contas': 0, 'dias_acesso': 0},
+        ]
+        for p in planos:
+            Plano.objects.get_or_create(nome=p['nome'], defaults=p)
+        self.stdout.write(self.style.SUCCESS('Planos criados com sucesso!'))</code></pre>
+                <p>Execute:</p>
+                <pre><code>python manage.py criar_planos</code></pre>
+            </div>
+        </section>
+
+        <!-- 6. Serializers -->
+        <section id="serializers">
+            <div class="step">
+                <h3>📦 6. Serializers</h3>
+                <p>Crie <code>api/serializers.py</code>:</p>
+                <pre><code>from rest_framework import serializers
+from django.contrib.auth.models import User
+from .models import Plano, Assinatura, Conta, Trade
+
+class UsuarioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
+
+class PlanoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Plano
+        fields = '__all__'
+
+class AssinaturaSerializer(serializers.ModelSerializer):
+    plano = PlanoSerializer(read_only=True)
+    plano_id = serializers.PrimaryKeyRelatedField(
+        queryset=Plano.objects.all(), source='plano', write_only=True
+    )
+    esta_ativa = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Assinatura
+        fields = ['id', 'plano', 'plano_id', 'data_inicio', 'data_expiracao', 'ativa', 'esta_ativa']
+
+    def get_esta_ativa(self, obj):
+        return obj.esta_ativa()
+
+class ContaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Conta
+        fields = '__all__'
+        read_only_fields = ['usuario', 'criada_em']
+
+class TradeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trade
+        fields = '__all__'
+        read_only_fields = ['conta']</code></pre>
+            </div>
+        </section>
+
+        <!-- 7. Permissões -->
+        <section id="permissoes">
+            <div class="step">
+                <h3>🛡️ 7. Permissões personalizadas (limites)</h3>
+                <p>Crie <code>api/permissions.py</code>:</p>
+                <pre><code>from rest_framework import permissions
+from .models import Assinatura, Conta, Trade
+
+class TemAssinaturaAtiva(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if not request.user.is_authenticated:
+            return False
+        return Assinatura.objects.filter(usuario=request.user, ativa=True).exists()
+
+class PodeCriarConta(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method != 'POST':
+            return True
+        assinatura = Assinatura.objects.filter(usuario=request.user, ativa=True).first()
+        if not assinatura:
+            return False
+        plano = assinatura.plano
+        contas_existentes = Conta.objects.filter(usuario=request.user).count()
+        if plano.max_contas == 0:
+            return True
+        return contas_existentes < plano.max_contas
+
+class PodeCriarTrade(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method != 'POST':
+            return True
+        assinatura = Assinatura.objects.filter(usuario=request.user, ativa=True).first()
+        if not assinatura:
+            return False
+        plano = assinatura.plano
+        conta_id = request.data.get('conta')
+        if not conta_id:
+            return False
+        try:
+            conta = Conta.objects.get(id=conta_id, usuario=request.user)
+        except Conta.DoesNotExist:
+            return False
+        if plano.max_trades == 0:
+            return True
+        trades_na_conta = conta.trades.count()
+        return trades_na_conta < plano.max_trades</code></pre>
+            </div>
+        </section>
+
+        <!-- 8. Views -->
+        <section id="views">
+            <div class="step">
+                <h3>📡 8. Views (ViewSets)</h3>
+                <p>Edite <code>api/views.py</code>:</p>
+                <pre><code>from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from django.contrib.auth.models import User
+from django.utils import timezone
+from .models import Conta, Trade, Plano, Assinatura
+from .serializers import (
+    UsuarioSerializer, ContaSerializer, TradeSerializer,
+    PlanoSerializer, AssinaturaSerializer
+)
+from .permissions import TemAssinaturaAtiva, PodeCriarConta, PodeCriarTrade
+
+class UsuarioViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UsuarioSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response(UsuarioSerializer(user).data, status=status.HTTP_201_CREATED)
+
+class PlanoViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Plano.objects.all()
+    serializer_class = PlanoSerializer
+    permission_classes = [permissions.AllowAny]
+
+class AssinaturaViewSet(viewsets.ModelViewSet):
+    serializer_class = AssinaturaSerializer
+    permission_classes = [permissions.IsAuthenticated, TemAssinaturaAtiva]
+
+    def get_queryset(self):
+        return Assinatura.objects.filter(usuario=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(usuario=self.request.user)
+
+class ContaViewSet(viewsets.ModelViewSet):
+    serializer_class = ContaSerializer
+    permission_classes = [permissions.IsAuthenticated, TemAssinaturaAtiva, PodeCriarConta]
+
+    def get_queryset(self):
+        return Conta.objects.filter(usuario=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(usuario=self.request.user)
+
+class TradeViewSet(viewsets.ModelViewSet):
+    serializer_class = TradeSerializer
+    permission_classes = [permissions.IsAuthenticated, TemAssinaturaAtiva, PodeCriarTrade]
+
+    def get_queryset(self):
+        return Trade.objects.filter(conta__usuario=self.request.user)
+
+    def perform_create(self, serializer):
+        conta_id = self.request.data.get('conta')
+        conta = Conta.objects.get(id=conta_id, usuario=self.request.user)
+        serializer.save(conta=conta)</code></pre>
+            </div>
+        </section>
+
+        <!-- 9. URLs -->
+        <section id="urls">
+            <div class="step">
+                <h3>🔗 9. URLs</h3>
+                <p>Crie <code>api/urls.py</code>:</p>
+                <pre><code>from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import UsuarioViewSet, ContaViewSet, TradeViewSet, PlanoViewSet, AssinaturaViewSet
+
+router = DefaultRouter()
+router.register('usuarios', UsuarioViewSet, basename='usuario')
+router.register('contas', ContaViewSet, basename='conta')
+router.register('trades', TradeViewSet, basename='trade')
+router.register('planos', PlanoViewSet, basename='plano')
+router.register('assinaturas', AssinaturaViewSet, basename='assinatura')
+
+urlpatterns = [
+    path('', include(router.urls)),
+]</code></pre>
+
+                <p>Edite <code>diario_backend/urls.py</code>:</p>
+                <pre><code>from django.contrib import admin
+from django.urls import path, include
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include('api.urls')),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+]</code></pre>
+            </div>
+        </section>
+
+        <!-- 10. Servir frontend -->
+        <section id="frontend">
+            <div class="step">
+                <h3>🌐 10. Servir o frontend (opcional)</h3>
+                <p>Você pode servir seu HTML estático pelo Django. Crie uma pasta <code>templates</code> e coloque seu <code>index.html</code> lá. Depois adicione uma view simples:</p>
+                <pre><code># Em api/views.py
+from django.shortcuts import render
+
+def index(request):
+    return render(request, 'index.html')</code></pre>
+                <p>Em <code>diario_backend/urls.py</code>, adicione:</p>
+                <pre><code>from api.views import index
+urlpatterns += [
+    path('', index, name='index'),
+]</code></pre>
+                <p>Não esqueça de configurar o <code>STATICFILES_DIRS</code> para incluir sua pasta de estáticos (CSS, JS, imagens).</p>
+            </div>
+        </section>
+
+        <!-- 11. Pagamento -->
+        <section id="pagamento">
+            <div class="step">
+                <h3>💳 11. Integração com pagamento (Mercado Pago - exemplo)</h3>
+                <p>Instale a SDK: <code>pip install mercadopago</code></p>
+                <p>Adicione a view para gerar link de pagamento (exemplo simplificado):</p>
+                <pre><code># Em api/views.py (adicione)
+import mercadopago
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import permissions
+
+class GerarLinkPagamento(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        plano_id = request.data.get('plano_id')
+        try:
+            plano = Plano.objects.get(id=plano_id)
+        except Plano.DoesNotExist:
+            return Response({'erro': 'Plano inválido'}, status=400)
+
+        sdk = mercadopago.SDK("SEU_ACCESS_TOKEN")
+        preference_data = {
+            "items": [
+                {
+                    "title": plano.nome,
+                    "quantity": 1,
+                    "currency_id": "BRL",
+                    "unit_price": float(plano.preco)
+                }
+            ],
+            "back_urls": {
+                "success": "https://seudominio.com/pagamento/sucesso",
+                "failure": "https://seudominio.com/pagamento/erro",
+                "pending": "https://seudominio.com/pagamento/pendente"
+            },
+            "auto_return": "approved",
+        }
+        preference = sdk.preference().create(preference_data)
+        return Response({'init_point': preference['response']['init_point']})</code></pre>
+                <p>Adicione a URL correspondente em <code>api/urls.py</code>:</p>
+                <pre><code>path('gerar-link-pagamento/', GerarLinkPagamento.as_view(), name='gerar_link')</code></pre>
+                <p>Crie uma view de retorno que confirma o pagamento e cria a assinatura (usando webhook ou retorno automático).</p>
+            </div>
+        </section>
+
+        <!-- 12. Adaptando frontend -->
+        <section id="frontend-api">
+            <div class="step">
+                <h3>📱 12. Adaptando o frontend</h3>
+                <p>No seu JavaScript atual, substitua as funções que acessam IndexedDB por chamadas <code>fetch</code> para a API. Exemplo:</p>
+                <pre><code>// Função para obter token (login)
+async function login(username, password) {
+    const response = await fetch('/api/token/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    });
+    const data = await response.json();
+    if (response.ok) {
+        localStorage.setItem('access_token', data.access);
+        localStorage.setItem('refresh_token', data.refresh);
+        return true;
+    }
+    return false;
+}
+
+// Função genérica para chamadas autenticadas
+async function apiFetch(url, options = {}) {
+    const token = localStorage.getItem('access_token');
+    options.headers = {
+        ...options.headers,
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };
+    const response = await fetch(url, options);
+    if (response.status === 401) {
+        // tentar refresh ou redirecionar para login
+        // ... (implementar refresh)
+    }
+    return response.json();
+}
+
+// Exemplo: carregar contas
+async function carregarContas() {
+    const contas = await apiFetch('/api/contas/');
+    // atualizar o select
+}
+
+// Exemplo: salvar trade
+async function salvarTrade(trade, id = null) {
+    const url = id ? `/api/trades/${id}/` : '/api/trades/';
+    const method = id ? 'PUT' : 'POST';
+    const result = await apiFetch(url, {
+        method,
+        body: JSON.stringify(trade)
+    });
+    return result;
+}</code></pre>
+                <p>Você também precisará de telas de login e registro, e uma tela para escolha de plano e pagamento.</p>
+            </div>
+        </section>
+
+        <!-- 13. Verificação de limites -->
+        <section id="limites">
+            <div class="step">
+                <h3>📊 13. Verificação de limites no frontend</h3>
+                <pre><code>async function verificarLimites() {
+    const assinaturas = await apiFetch('/api/assinaturas/');
+    const assinaturaAtiva = assinaturas.find(a => a.esta_ativa);
+    if (!assinaturaAtiva) {
+        // redirecionar para planos
+        return;
+    }
+    const plano = assinaturaAtiva.plano;
+    // Armazenar limites para uso posterior
+    localStorage.setItem('limite_contas', plano.max_contas);
+    localStorage.setItem('limite_trades', plano.max_trades);
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- 14. Deploy -->
+        <section id="deploy">
+            <div class="step">
+                <h3>🚀 14. Deploy</h3>
+                <ul>
+                    <li><strong>Backend:</strong> Use PythonAnywhere, Heroku, DigitalOcean ou AWS. Configure variáveis de ambiente, banco de dados PostgreSQL, e sirva com Gunicorn + Nginx.</li>
+                    <li><strong>Frontend:</strong> Se optou por servir pelo Django, cole seus arquivos estáticos na pasta <code>static/</code>. Se preferir separado, pode hospedar no Netlify ou Vercel, apontando para a API.</li>
+                    <li><strong>HTTPS:</strong> Obrigatório para usar JWT com segurança.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr>
+
+        <div style="background-color: #14181f; border: 1px solid #2a313e; border-radius: 12px; padding: 20px; margin-top: 30px;">
+            <h2 style="color: #3b82f6; border-bottom: 1px solid #3b82f6;">✅ Conclusão</h2>
+            <p>Com esses passos, você terá um backend Django completo com autenticação, planos de assinatura com limites de trades e contas, e uma API pronta para ser consumida pelo seu frontend atual. Basta adaptar as chamadas JavaScript e implementar a interface de login/pagamento.</p>
+            <p>Se precisar de ajuda em alguma etapa específica, consulte a documentação oficial do Django REST Framework e do Mercado Pago. Boa sorte!</p>
+        </div>
+
+        <footer>
+            <p>Guia de Migração - Diário de Trader v2.0 • Tema Dark • Desenvolvido para traders profissionais</p>
+            <p>© 2026 - Distribuição livre para fins educacionais</p>
+        </footer>
+    </div>
+</body>
+</html>
