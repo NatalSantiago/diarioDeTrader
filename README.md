@@ -3,11 +3,11 @@
 <div align="center">
 <span id="diario-de-trader---sistema-completo-de-gerenciamento-de-trades"></span>
 
-# 📊 Diário de Trader - Versão 1.0 - Dashboard Inteligente
+# 📊 Diário de Trader - Versão 2.0 - Múltiplas Contas com IndexedDB
 
-**Sistema Web Completo para Registro e Análise de Performance de Trading**
+**Sistema Web Profissional para Registro, Análise e Gerenciamento de Múltiplas Contas de Trading**
 
-*"Registre, analise e evolua com seu diário de trading profissional"*
+*"Gerencie todas as suas contas em um só lugar, com persistência real e segurança"*
 
 <img src="LogoDiario.png" width="300" height="300" alt="Logo Diário de Trader">
 
@@ -16,11 +16,12 @@
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![IndexedDB](https://img.shields.io/badge/IndexedDB-3E4E5C?style=for-the-badge)
 ![SweetAlert2](https://img.shields.io/badge/SweetAlert2-FF4088?style=for-the-badge)
 ![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chart.js&logoColor=white)
 ![CryptoJS](https://img.shields.io/badge/CryptoJS-000000?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
-![Version](https://img.shields.io/badge/Version-1.0-brightgreen)
+![Version](https://img.shields.io/badge/Version-2.0-brightgreen)
 
 [![Download Now](https://img.shields.io/badge/Download-Latest_Release-success)](#)
 [![WhatsApp Support](https://img.shields.io/badge/WhatsApp-Suporte_24h-25D366)](https://wa.me/5599984447141)
@@ -40,6 +41,7 @@
   - [📥 Instalação](#instalacao)
   - [⚙️ Configuração Inicial](#configuracao-inicial)
 - [📖 Tutorial de Uso](#tutorial-de-uso)
+  - [➕ Criando uma Nova Conta](#criando-uma-nova-conta)
   - [🎮 Lançando um Trade](#lancando-um-trade)
   - [📈 Editando ou Fechando um Trade](#editando-ou-fechando-um-trade)
   - [📊 Visualizando o Dashboard](#visualizando-o-dashboard)
@@ -67,16 +69,19 @@
 
 <span id="o-que-e-o-diario-de-trader"></span>
 
-O **Diário de Trader** é uma aplicação web completa e intuitiva para traders registrarem, acompanharem e analisarem todas as suas operações. Desenvolvido com HTML5, CSS3 e JavaScript puro, ele roda diretamente no navegador, sem necessidade de servidor ou banco de dados. Todos os dados são armazenados localmente no seu computador (via `localStorage`) e podem ser criptografados para backup.
+O **Diário de Trader** é uma aplicação web profissional para traders registrarem, acompanharem e analisarem todas as suas operações em **múltiplas contas**. Desenvolvido com HTML5, CSS3 e JavaScript puro, ele roda diretamente no navegador e utiliza **IndexedDB** como banco de dados local – uma tecnologia moderna que oferece muito mais capacidade e performance que o antigo `localStorage`. Agora você pode gerenciar quantas contas quiser (ex: conta demo, conta real, diferentes prop firms) com total isolamento de dados.
 
 ### Principais Diferenciais:
+- **Múltiplas contas** com gerenciamento completo (criar, editar, excluir, selecionar)
+- **Banco de dados IndexedDB** – persistente, assíncrono e com alta capacidade
 - **Interface moderna** com tema claro/escuro
 - **Cálculo automático** de meta, drawdown estático/dinâmico e drawdown diário
 - **Gráficos interativos** com Chart.js (evolução do saldo, resultados, drawdown diário)
 - **Sistema de filtros** por período e status
-- **Backup criptografado** com AES
+- **Backup criptografado** com AES (exporta todas as contas em um único arquivo)
 - **Impressão profissional** de listas e relatórios individuais
 - **Upload de imagens** via Ctrl+V para documentar entradas e saídas
+- **Persistência da última conta acessada** – ao reabrir o navegador, você continua de onde parou
 
 [⬆ Voltar ao Topo](#diario-de-trader---sistema-completo-de-gerenciamento-de-trades)
 
@@ -86,7 +91,18 @@ O **Diário de Trader** é uma aplicação web completa e intuitiva para traders
 
 <span id="funcionalidades-principais"></span>
 
-### Para o Trader
+### Gerenciamento de Contas
+
+| Funcionalidade | Descrição |
+|----------------|-----------|
+| **➕ Nova Conta** | Crie contas com nome, saldo inicial, meta, limites de drawdown |
+| **📋 Gerenciar Contas** | Modal com lista de todas as contas, mostrando saldo, meta, trades e resultado |
+| **✏️ Editar Conta** | Altere qualquer parâmetro da conta |
+| **🗑️ Excluir Conta** | Remova a conta e todos os seus trades (com confirmação) |
+| **🔍 Selecionar** | Ative a conta desejada e volte ao painel principal |
+| **💾 Persistência** | A última conta acessada é lembrada mesmo após fechar o navegador |
+
+### Para o Trader (dentro de cada conta)
 
 | Funcionalidade | Descrição |
 |----------------|-----------|
@@ -100,9 +116,9 @@ O **Diário de Trader** é uma aplicação web completa e intuitiva para traders
 
 | Card | Descrição |
 |------|-----------|
-| **💰 Saldo Inicial** | Capital definido nas configurações |
+| **💰 Saldo inicial** | Capital da conta (configurado na criação) |
 | **🎯 Meta** | Percentual de lucro desejado, com indicador visual de atingimento |
-| **📉 Drawdown Máx** | Maior perda percentual (estática ou dinâmica, configurável) |
+| **📉 Drawdown Máx** | Maior perda percentual (estática ou dinâmica, configurável por conta) |
 | **✅ Positivos** | Total de trades com lucro |
 | **❌ Negativos** | Total de trades com prejuízo |
 
@@ -118,7 +134,7 @@ O **Diário de Trader** é uma aplicação web completa e intuitiva para traders
 
 ### Filtros e Impressão
 
-- **Filtro por período:** Todos, esta semana, este mês ou personalizado
+- **Filtro por período:** Hoje, esta semana, este mês, personalizado ou todos
 - **Filtro por status:** Abertos, Fechados, Positivos, Negativos
 - **Impressão da lista** com resumo e tabela detalhada
 - **Impressão individual** de cada trade, incluindo imagens
@@ -131,9 +147,9 @@ O **Diário de Trader** é uma aplicação web completa e intuitiva para traders
 
 ### Segurança e Backup
 
-- **Backup criptografado** com AES (extensão `.enc`)
-- **Restauração segura** com validação
-- **Persistência local** via `localStorage`
+- **Backup criptografado** com AES – gera um arquivo `.enc` contendo **todas as contas**
+- **Restauração segura** com validação – substitui os dados atuais pelo backup
+- **Banco de dados IndexedDB** – dados ficam armazenados no perfil do navegador, isolados por origem
 
 [⬆ Voltar ao Topo](#diario-de-trader---sistema-completo-de-gerenciamento-de-trades)
 
@@ -150,8 +166,8 @@ O **Diário de Trader** é uma aplicação web completa e intuitiva para traders
 │                    NAVEGADOR (Cliente)                       │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
-│  │   Interface │  │  Lógica de  │  │  Armazenamento      │ │
-│  │    HTML/CSS │  │   Cálculo   │  │   localStorage      │ │
+│  │   Interface │  │  Lógica de  │  │   Banco de Dados    │ │
+│  │    HTML/CSS │  │   Cálculo   │  │     IndexedDB       │ │
 │  └─────────────┘  └─────────────┘  └─────────────────────┘ │
 │         │               │                     │            │
 │         ▼               ▼                     ▼            │
@@ -162,15 +178,23 @@ O **Diário de Trader** é uma aplicação web completa e intuitiva para traders
 └─────────────────────────────────────────────────────────────┘
 ```
 
+### Estrutura do Banco de Dados (IndexedDB)
+
+| Object Store | Descrição |
+|--------------|-----------|
+| **contas** | Cada conta é um objeto com `id`, `nome`, `saldoInicial`, `metaPercent`, `ddTipo`, `ddMax`, `ddDiarioLimite` e um array `trades` contendo todas as operações daquela conta. |
+
 ### Fluxo de Dados
 
 ```
-1. Usuário lança/edita trade via modal
-2. Dados são validados e armazenados no localStorage
-3. Métricas são recalculadas e exibidas
-4. Lista de trades é renderizada com filtros
-5. Gráficos do dashboard são atualizados
-6. Backups podem ser gerados/restaurados
+1. Usuário seleciona ou cria uma conta
+2. Dados da conta são carregados do IndexedDB
+3. Usuário lança/edita trade via modal
+4. Dados são validados e salvos no IndexedDB
+5. Métricas são recalculadas e exibidas
+6. Lista de trades é renderizada com filtros
+7. Gráficos do dashboard são atualizados
+8. Backups podem ser gerados/restaurados (exporta todas as contas)
 ```
 
 [⬆ Voltar ao Topo](#diario-de-trader---sistema-completo-de-gerenciamento-de-trades)
@@ -185,7 +209,7 @@ O **Diário de Trader** é uma aplicação web completa e intuitiva para traders
 
 <span id="pre-requisitos"></span>
 
-- **Navegador moderno** (Chrome, Firefox, Edge, Opera)
+- **Navegador moderno** (Chrome, Firefox, Edge, Opera) – todos suportam IndexedDB
 - **JavaScript ativado**
 - **Conexão com internet** (apenas para carregar as bibliotecas CDN: SweetAlert2, CryptoJS, Chart.js)
 
@@ -203,18 +227,20 @@ O **Diário de Trader** é uma aplicação web completa e intuitiva para traders
 
 <span id="configuracao-inicial"></span>
 
-Ao abrir o sistema pela primeira vez, você verá valores padrão. Para configurar sua conta:
+Ao abrir o sistema pela primeira vez, uma conta padrão "Conta Demo" será criada automaticamente. Para gerenciar suas contas:
 
-1. Clique no botão **⚙️ Configurar Metas** (topo direito)
-2. Preencha:
-   - **Saldo Inicial** (ex: 5000)
-   - **Meta de Lucro (%)** (ex: 10)
+1. Clique no botão **📋 Gerenciar Contas** (topo direito)
+2. No modal, clique em **➕ Nova Conta**
+3. Preencha:
+   - **Nome da Conta** (ex: "ICMarkets 5k", "The Trading Pit 50k")
+   - **Saldo Inicial (U$)**
+   - **Meta de Lucro (%)**
    - **Tipo de Drawdown Máximo**: Estático (baseado no capital inicial) ou Dinâmico (baseado no pico de equity)
-   - **Drawdown Máximo (%)**: limite de perda (ex: 7)
-   - **Limite de Drawdown Diário (%)**: ex: 2
-3. Clique em **Salvar**
+   - **Limite de Drawdown Máx (%)**
+   - **Limite de Drawdown Diário (%)**
+4. Clique em **Criar**
 
-Pronto! O sistema está configurado para sua conta.
+A nova conta será automaticamente selecionada. Você pode alternar entre contas usando o **seletor** ao lado do botão "Lançar Trade".
 
 [⬆ Voltar ao Topo](#diario-de-trader---sistema-completo-de-gerenciamento-de-trades)
 
@@ -224,12 +250,22 @@ Pronto! O sistema está configurado para sua conta.
 
 <span id="tutorial-de-uso"></span>
 
+### ➕ Criando uma Nova Conta
+
+<span id="criando-uma-nova-conta"></span>
+
+1. Clique em **📋 Gerenciar Contas**
+2. Clique em **➕ Nova Conta**
+3. Preencha os dados e clique em **Criar**
+4. A nova conta será selecionada automaticamente e você já pode lançar trades nela.
+
 ### 🎮 Lançando um Trade
 
 <span id="lancando-um-trade"></span>
 
-1. Clique no botão **🚀 Lançar Trade**
-2. Preencha os dados da operação:
+1. Certifique-se de que a conta desejada está selecionada no dropdown à esquerda.
+2. Clique no botão **🚀 Lançar Trade**
+3. Preencha os dados da operação:
    - **Moeda**: selecione o par (EURUSD, USDJPY, etc.)
    - **Data/Hora Entrada**: automaticamente preenchida com o momento atual (pode alterar)
    - **Tipo entrada**: Compra (Long) ou Venda (Short)
@@ -241,15 +277,15 @@ Pronto! O sistema está configurado para sua conta.
 
    **Seção de Fechamento** (preencha apenas se o trade já estiver fechado):
    - **Fechado com**: Lucro ou Prejuízo
-   - **Valor (R$)**: valor em reais do resultado
+   - **Valor (U$)**: valor em dólares do resultado
    - **Data/Hora**: data/hora do fechamento
    - **Imagem Fechamento**: cole print (opcional)
    - **Observações Fechamento**
    - **Sentimento no fechamento**
 
-3. Clique em **💾 Salvar Trade**
+4. Clique em **💾 Salvar Trade**
 
-O trade aparecerá na lista e as métricas serão atualizadas.
+O trade aparecerá na lista e as métricas da conta serão atualizadas.
 
 ### 📈 Editando ou Fechando um Trade
 
@@ -265,7 +301,7 @@ O trade aparecerá na lista e as métricas serão atualizadas.
 
 Clique no botão **📊 Dashboard** (topo direito). Será aberto um modal com:
 
-- **Estatísticas rápidas**: Total de trades, Win Rate, Lucro Líquido, Profit Factor
+- **Estatísticas rápidas** da conta atual: Total de trades, Win Rate, Lucro Líquido, Profit Factor
 - **Gráfico de Evolução do Saldo** (linha)
 - **Gráfico de Resultados** (pizza: lucros vs prejuízos)
 - **Gráfico de Drawdown Diário** (linha contínua)
@@ -282,7 +318,7 @@ O sistema calcula automaticamente:
 - **Drawdown Máximo**:
   - **Estático**: maior perda percentual em relação ao capital inicial.
   - **Dinâmico**: maior queda percentual em relação ao pico de equity (máximo histórico).
-- **Drawdown Diário**: maior queda intradiária (menor saldo do dia em relação ao saldo de abertura). Exibido com sinal de menos (ex: `-3.1%`) e ícone ⚠️ se ultrapassar o limite configurado.
+- **Drawdown Diário**: maior queda intradiária (menor saldo do dia em relação ao saldo de abertura). Exibido com sinal de menos (ex: `-3,1%`) e ícone ⚠️ se ultrapassar o limite configurado.
 
 ### 📅 Filtros e Impressão
 
@@ -296,10 +332,10 @@ O sistema calcula automaticamente:
 
 <span id="backup-e-restauracao"></span>
 
-- **💾 Backup**: gera um arquivo `.enc` com todos os trades e configurações, criptografado com AES.
-- **📂 Restaurar**: selecione o arquivo de backup. O sistema descriptografa e substitui os dados atuais.
+- **💾 Backup**: gera um arquivo com nome `BackupDiarioTrader-DD-MM-AAAA.enc` contendo **todas as contas** e trades, criptografado com AES.
+- **📂 Restaurar**: selecione o arquivo de backup. O sistema descriptografa e substitui os dados atuais (todas as contas).
 
-> ⚠️ **Atenção**: a restauração substitui todos os dados existentes.
+> ⚠️ **Atenção**: a restauração substitui todos os dados existentes. Recomenda-se fazer um backup antes de restaurar.
 
 [⬆ Voltar ao Topo](#diario-de-trader---sistema-completo-de-gerenciamento-de-trades)
 
@@ -314,13 +350,13 @@ O sistema calcula automaticamente:
 <span id="meta-de-lucro"></span>
 
 ```
-Meta em R$ = Saldo Inicial × (Meta % / 100)
+Meta em U$ = Saldo Inicial × (Meta % / 100)
 Lucro Atual = Saldo Atual - Saldo Inicial
-Falta = Máximo(0, Meta em R$ - Lucro Atual)
+Falta = Máximo(0, Meta em U$ - Lucro Atual)
 Percentual de Falta = (Falta / Saldo Inicial) × 100
 ```
 
-Quando `Lucro Atual >= Meta em R$`, o card muda para verde e exibe "Meta atingida!".
+Quando `Lucro Atual >= Meta em U$`, o card muda para verde e exibe "Meta atingida!".
 
 ### 📉 Drawdown Máximo
 
@@ -397,7 +433,7 @@ Você pode personalizar:
 
 - **Lista de pares de moedas**: edite o `<select id="modal-moeda">` no HTML para adicionar ou remover opções.
 - **Formatos de preço**: ajuste a função `getFormatConfig()` para incluir novos pares com suas casas decimais.
-- **Limites e metas**: altere via interface de configuração.
+- **Limites e metas**: altere via interface de gerenciamento de contas.
 - **Cores e estilos**: modifique as variáveis CSS em `:root` e `.light-theme`.
 
 [⬆ Voltar ao Topo](#diario-de-trader---sistema-completo-de-gerenciamento-de-trades)
@@ -451,9 +487,19 @@ Você pode personalizar:
 - Use Ctrl+V em um campo de texto para testar
 - Prefira imagens PNG ou JPEG
 
+#### 5. A última conta não é lembrada ao reabrir o navegador
+
+**Causas:**
+- O `localStorage` foi limpo
+- Bug na lógica de persistência
+
+**Solução:**
+- Verifique se outros dados (como tema) estão sendo lembrados
+- O sistema salva o ID da última conta ao carregá-la; se o problema persistir, abra o console (F12) e veja se há mensagens de erro.
+
 ### Logs e Depuração
 
-O sistema não possui logs visíveis, mas você pode abrir o console do navegador (F12) para ver possíveis erros.
+Abra o console do navegador (F12) para ver mensagens de log e possíveis erros. O sistema exibe logs como "Conta carregada: X" e "ID da última conta no localStorage: Y".
 
 [⬆ Voltar ao Topo](#diario-de-trader---sistema-completo-de-gerenciamento-de-trades)
 
@@ -463,30 +509,29 @@ O sistema não possui logs visíveis, mas você pode abrir o console do navegado
 
 <span id="perguntas-frequentes"></span>
 
-#### 1. Os dados ficam salvos onde?
-Todos os dados ficam no `localStorage` do seu navegador. Eles persistem mesmo após fechar a aba, mas **não são transferidos para outro computador** a menos que você use o backup.
+#### 1. Onde ficam os dados agora? Ainda no localStorage?
+Não. Agora usamos **IndexedDB**, um banco de dados real dentro do navegador. Os dados ficam em uma pasta específica do perfil do usuário, com muito mais capacidade e organização.
 
-#### 2. Posso usar em vários dispositivos?
-Sim, desde que você transfira o arquivo de backup e restaure no outro dispositivo.
+#### 2. Posso ter várias contas?
+Sim! O grande diferencial da versão 2.0. Você pode criar quantas contas quiser, cada uma com seus próprios trades e configurações. O seletor no topo permite alternar rapidamente.
 
-#### 3. O que acontece se eu limpar os dados do navegador?
-Os dados do `localStorage` serão apagados. Faça backup regularmente.
+#### 3. Como faço para alternar entre contas?
+Use o **dropdown** ao lado do botão "Lançar Trade". Basta selecionar a conta desejada e todos os dados (trades, métricas) serão atualizados.
 
-#### 4. É possível exportar para Excel?
-Atualmente não, mas você pode imprimir a lista e copiar os dados da tabela.
+#### 4. Posso excluir uma conta?
+Sim, no modal "Gerenciar Contas" clique em **🗑️ Excluir**. A conta será removida junto com todos os seus trades. **Não é possível excluir a conta que está ativa**; primeiro selecione outra.
 
-#### 5. O sistema funciona offline?
-Sim, após o primeiro carregamento (quando as bibliotecas CDN são baixadas), você pode usar offline, desde que o navegador mantenha o cache.
+#### 5. O backup agora inclui todas as contas?
+Sim. O botão **💾 Backup** exporta **todas as contas** em um único arquivo criptografado. Ao restaurar, todas as contas do backup substituem as atuais.
 
-#### 6. Posso alterar a chave de criptografia do backup?
-A chave está fixa no código (`ENCRYPTION_KEY`). Se desejar, pode alterar no arquivo HTML, mas todos os backups antigos se tornarão inválidos.
+#### 6. Por que os valores agora aparecem como "U$"?
+Porque o sistema foi ajustado para trabalhar com dólar americano, mantendo a formatação brasileira (ponto para milhar, vírgula para decimal). Ex: U$ 10.000,50.
 
-#### 7. O drawdown diário considera o menor saldo do dia?
-Sim! O sistema simula o saldo após cada trade e registra o menor valor atingido durante o dia.
+#### 7. O que mudou no nome do backup?
+Agora o arquivo tem o nome fixo `BackupDiarioTrader-DD-MM-AAAA.enc` (ex: `BackupDiarioTrader-24-02-2026.enc`), facilitando a organização.
 
-#### 8. Qual a diferença entre drawdown estático e dinâmico?
-- **Estático**: mede a perda em relação ao capital inicial (nunca se recupera, mesmo que o saldo suba).
-- **Dinâmico**: mede a queda em relação ao maior valor já atingido (pico).
+#### 8. Ainda posso configurar metas e drawdown?
+Sim, mas agora isso é feito dentro de cada conta. Ao criar ou editar uma conta, você define todos os parâmetros. O botão "Configurar Metas" foi removido.
 
 [⬆ Voltar ao Topo](#diario-de-trader---sistema-completo-de-gerenciamento-de-trades)
 
@@ -645,7 +690,18 @@ Todo valor recebido é reinvestido:
 
 <span id="historico-de-versoes"></span>
 
-### v1.0 (Atual) - Primeira Versão Estável
+### v2.0 (Atual) - Múltiplas Contas com IndexedDB
+- ✅ **IndexedDB** como banco de dados local (persistente, assíncrono, alta capacidade)
+- ✅ **Gerenciamento de múltiplas contas** (criar, editar, excluir, selecionar)
+- ✅ Seletor de contas na interface principal
+- ✅ Backup único contendo **todas as contas**
+- ✅ Moeda padrão **U$** com formatação brasileira
+- ✅ Nome do backup fixo com data `BackupDiarioTrader-DD-MM-AAAA.enc`
+- ✅ Persistência da última conta acessada
+- ✅ Remoção do botão "Configurar Metas" (agora dentro de cada conta)
+- ✅ Todas as funcionalidades da v1.0 mantidas
+
+### v1.0 - Primeira Versão Estável (legado, com localStorage)
 - ✅ Interface completa com cards e lista de trades
 - ✅ Configuração de metas e limites de drawdown
 - ✅ Cálculo de drawdown estático/dinâmico e diário
@@ -656,11 +712,11 @@ Todo valor recebido é reinvestido:
 - ✅ Temas claro/escuro
 - ✅ Filtros por período e status
 
-### Próximas Versões
-- **v1.1** - Exportação para CSV/Excel
-- **v1.2** - Múltiplas contas
-- **v1.3** - Estatísticas avançadas (Sharpe, drawdown por período)
-- **v2.0** - Versão mobile nativa
+### Próximas Versões (planejadas)
+- **v2.1** - Exportação para CSV/Excel
+- **v2.2** - Estatísticas avançadas (Sharpe, drawdown por período)
+- **v2.3** - Sincronização com nuvem (opcional)
+- **v3.0** - Versão mobile nativa
 
 [⬆ Voltar ao Topo](#diario-de-trader---sistema-completo-de-gerenciamento-de-trades)
 
@@ -670,12 +726,12 @@ Todo valor recebido é reinvestido:
 
 ## 🚀 Comece Agora!
 
-**[⬇️ BAIXAR VERSÃO 1.0](https://github.com/NatalSantiago/DiarioTrader/releases/latest)**
+**[⬇️ BAIXAR VERSÃO 2.0](https://github.com/NatalSantiago/DiarioTrader/releases/latest)**
 
 ### Fluxo Recomendado:
 1. **Baixe** o arquivo `diario-trader.html`
 2. **Abra** no navegador
-3. **Configure** sua conta
+3. **Crie** suas contas
 4. **Registre** seus trades
 5. **Acompanhe** suas métricas
 6. **Faça backup** regularmente
