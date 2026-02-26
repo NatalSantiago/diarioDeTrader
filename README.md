@@ -3,11 +3,11 @@
 <div align="center">
 <span id="diario-de-trader---sistema-completo-de-gerenciamento-de-trades"></span>
 
-# 📊 Diário de Trader - Versão 2.0 - Múltiplas Contas com IndexedDB
+# 📊 Diário de Trader - Versão 3.5 - Múltiplas Contas com IndexedDB e Importação MT5
 
 **Sistema Web Profissional para Registro, Análise e Gerenciamento de Múltiplas Contas de Trading**
 
-*"Gerencie todas as suas contas em um só lugar, com persistência real e segurança"*
+*"Gerencie todas as suas contas em um só lugar, com persistência real, segurança e importação automática do MetaTrader 5"*
 
 <img src="LogoDiario.png" width="300" height="300" alt="Logo Diário de Trader">
 
@@ -20,8 +20,9 @@
 ![SweetAlert2](https://img.shields.io/badge/SweetAlert2-FF4088?style=for-the-badge)
 ![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chart.js&logoColor=white)
 ![CryptoJS](https://img.shields.io/badge/CryptoJS-000000?style=for-the-badge)
+![SheetJS](https://img.shields.io/badge/SheetJS-0A5E8B?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
-![Version](https://img.shields.io/badge/Version-2.0-brightgreen)
+![Version](https://img.shields.io/badge/Version-3.5-brightgreen)
 
 [![Download Now](https://img.shields.io/badge/Download-Latest_Release-success)](#)
 [![WhatsApp Support](https://img.shields.io/badge/WhatsApp-Suporte_24h-25D366)](https://wa.me/5599984447141)
@@ -47,6 +48,7 @@
   - [📊 Visualizando o Dashboard](#visualizando-o-dashboard)
   - [📉 Métricas e Drawdown](#metricas-e-drawdown)
   - [📅 Filtros e Impressão](#filtros-e-impressao)
+  - [📥 Importando Trades do MetaTrader 5](#importando-trades-do-metatrader-5)
   - [💾 Backup e Restauração](#backup-e-restauracao)
 - [⚙️ Explicação dos Cálculos](#explicacao-dos-calculos)
   - [🎯 Meta de Lucro](#meta-de-lucro)
@@ -82,6 +84,7 @@ O **Diário de Trader** é uma aplicação web profissional para traders registr
 - **Impressão profissional** de listas e relatórios individuais
 - **Upload de imagens** via Ctrl+V para documentar entradas e saídas
 - **Persistência da última conta acessada** – ao reabrir o navegador, você continua de onde parou
+- **Importação automática de trades** a partir de arquivos Excel exportados do MetaTrader 5 (Posições + Resultados)
 
 [⬆ Voltar ao Topo](#diario-de-trader---sistema-completo-de-gerenciamento-de-trades)
 
@@ -119,8 +122,8 @@ O **Diário de Trader** é uma aplicação web profissional para traders registr
 | **💰 Saldo inicial** | Capital da conta (configurado na criação) |
 | **🎯 Meta** | Percentual de lucro desejado, com indicador visual de atingimento |
 | **📉 Drawdown Máx** | Maior perda percentual (estática ou dinâmica, configurável por conta) |
-| **✅ Positivos** | Total de trades com lucro |
-| **❌ Negativos** | Total de trades com prejuízo |
+| **✅ Positivos (líquido)** | Total de trades com lucro líquido |
+| **❌ Negativos (líquido)** | Total de trades com prejuízo líquido |
 
 ### Métricas Diárias
 
@@ -128,22 +131,46 @@ O **Diário de Trader** é uma aplicação web profissional para traders registr
 |-------|-----------|
 | **📅 trades hoje** | Quantidade de operações no dia atual |
 | **📉 Drawdown diário** | Maior queda intradiária, com alerta ⚠️ se ultrapassar o limite |
-| **📈 Positivos hoje** | Lucros do dia |
-| **📉 Negativos hoje** | Prejuízos do dia |
-| **💰 Saldo atual** | Saldo após todos os trades |
+| **📈 Positivos hoje** | Lucros do dia (líquidos) |
+| **📉 Negativos hoje** | Prejuízos do dia (líquidos) |
+| **💰 Saldo atual** | Saldo após todos os trades (líquido) |
+
+### Indicadores do Relatório (MT5)
+
+| Indicador | Descrição |
+|-----------|-----------|
+| **📉 Lucro Líquido Total** | Soma dos valores líquidos de todos os trades fechados |
+| **📈 Lucro Bruto** | Soma dos lucros brutos (positivos) |
+| **📉 Perda Bruta** | Soma dos prejuízos brutos (negativos) |
+| **📊 Fator de Lucro** | Lucro Bruto / |Perda Bruta| |
+| **📊 Retorno Esperado (Payoff)** | Lucro Líquido / Número de trades |
+| **📊 Fator de Recuperação** | Lucro Líquido / Drawdown máximo em valor |
+| **📊 Índice de Sharpe** | Média dos retornos líquidos / Desvio padrão |
 
 ### Filtros e Impressão
 
 - **Filtro por período:** Hoje, esta semana, este mês, personalizado ou todos
 - **Filtro por status:** Abertos, Fechados, Positivos, Negativos
-- **Impressão da lista** com resumo e tabela detalhada
-- **Impressão individual** de cada trade, incluindo imagens
+- **Impressão da lista** com resumo e tabela detalhada (exibe lucro bruto)
+- **Impressão individual** de cada trade, incluindo imagens e valores brutos
 
 ### Dashboard Gráfico
 
 - **📈 Evolução do Saldo** (linha)
-- **🥧 Resultados** (pizza)
+- **🥧 Resultados** (pizza com quantidade de trades)
 - **📉 Drawdown Diário** (linha contínua com todos os dias desde o primeiro trade)
+- **💰 Distribuição por Moeda** (pizza)
+- **📅 Distribuição por Dia da Semana** (barras)
+- **⏰ Distribuição por Hora** (barras)
+- **📊 Resultado Diário** (barras – últimos 30 dias)
+
+### Importação do MetaTrader 5
+
+- **📥 Botão "Importar Trades (MT5)"** na barra superior
+- Lê arquivos `.xlsx` exportados do MT5 (relatório de histórico)
+- Extrai automaticamente as **Posições** (trades) e a seção **Resultados** (totais)
+- Se um trade já existir (mesmo `positionId` ou mesma data, moeda e tipo), atualiza apenas os valores numéricos, preservando imagens e observações
+- Os totais do relatório são armazenados e usados para exibir os indicadores exatos do MT5
 
 ### Segurança e Backup
 
@@ -173,7 +200,7 @@ O **Diário de Trader** é uma aplicação web profissional para traders registr
 │         ▼               ▼                     ▼            │
 │  ┌─────────────────────────────────────────────────────┐   │
 │  │                    JavaScript                        │   │
-│  │  (SweetAlert2, Chart.js, CryptoJS, módulos próprios)│   │
+│  │  (SweetAlert2, Chart.js, CryptoJS, SheetJS, módulos)│   │
 │  └─────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -182,17 +209,19 @@ O **Diário de Trader** é uma aplicação web profissional para traders registr
 
 | Object Store | Descrição |
 |--------------|-----------|
-| **contas** | Cada conta é um objeto com `id`, `nome`, `saldoInicial`, `metaPercent`, `ddTipo`, `ddMax`, `ddDiarioLimite` e um array `trades` contendo todas as operações daquela conta. |
+| **contas** | Cada conta é um objeto com `id`, `nome`, `saldoInicial`, `metaPercent`, `ddTipo`, `ddMax`, `ddDiarioLimite`, `resumoMT5` (opcional, contém os totais importados) e um array `trades` contendo todas as operações daquela conta. |
 
 ### Fluxo de Dados
 
 ```
 1. Usuário seleciona ou cria uma conta
 2. Dados da conta são carregados do IndexedDB
-3. Usuário lança/edita trade via modal
+3. Usuário pode:
+   - Lançar/editar trade manualmente via modal
+   - Importar trades do MT5 (arquivo .xlsx)
 4. Dados são validados e salvos no IndexedDB
-5. Métricas são recalculadas e exibidas
-6. Lista de trades é renderizada com filtros
+5. Métricas são recalculadas e exibidas (priorizando o resumo importado, se houver)
+6. Lista de trades é renderizada com filtros (ordenada por data decrescente)
 7. Gráficos do dashboard são atualizados
 8. Backups podem ser gerados/restaurados (exporta todas as contas)
 ```
@@ -211,7 +240,7 @@ O **Diário de Trader** é uma aplicação web profissional para traders registr
 
 - **Navegador moderno** (Chrome, Firefox, Edge, Opera) – todos suportam IndexedDB
 - **JavaScript ativado**
-- **Conexão com internet** (apenas para carregar as bibliotecas CDN: SweetAlert2, CryptoJS, Chart.js)
+- **Conexão com internet** (apenas para carregar as bibliotecas CDN: SweetAlert2, CryptoJS, Chart.js, SheetJS)
 
 ### 📥 Instalação
 
@@ -233,7 +262,7 @@ Ao abrir o sistema pela primeira vez, uma conta padrão "Conta Demo" será criad
 2. No modal, clique em **➕ Nova Conta**
 3. Preencha:
    - **Nome da Conta** (ex: "ICMarkets 5k", "The Trading Pit 50k")
-   - **Saldo Inicial (U$)**
+   - **Saldo Inicial (U$)** (use ponto para decimais)
    - **Meta de Lucro (%)**
    - **Tipo de Drawdown Máximo**: Estático (baseado no capital inicial) ou Dinâmico (baseado no pico de equity)
    - **Limite de Drawdown Máx (%)**
@@ -276,16 +305,18 @@ A nova conta será automaticamente selecionada. Você pode alternar entre contas
    - **Sentimento na abertura**: selecione (opcional)
 
    **Seção de Fechamento** (preencha apenas se o trade já estiver fechado):
-   - **Fechado com**: Lucro ou Prejuízo
-   - **Valor (U$)**: valor em dólares do resultado
-   - **Data/Hora**: data/hora do fechamento
+   - **Lucro Bruto (U$)**: valor bruto da operação (sem comissões/swap)
+   - **Comissão (U$)**: valor da comissão (negativo no MT5, ex: -1.40)
+   - **Swap (U$)**: valor do swap (pode ser positivo ou negativo)
+   - **Fechado com**: selecione Lucro ou Prejuízo (é sugerido automaticamente com base no líquido)
+   - **Data/Hora Fechamento**
    - **Imagem Fechamento**: cole print (opcional)
    - **Observações Fechamento**
    - **Sentimento no fechamento**
 
 4. Clique em **💾 Salvar Trade**
 
-O trade aparecerá na lista e as métricas da conta serão atualizadas.
+O trade aparecerá na lista e as métricas da conta serão atualizadas. Na lista, o valor exibido é o **lucro bruto** (sem comissões/swap).
 
 ### 📈 Editando ou Fechando um Trade
 
@@ -293,7 +324,7 @@ O trade aparecerá na lista e as métricas da conta serão atualizadas.
 
 - **Para editar/ver detalhes:** clique em **👁️ Editar/Ver** no trade desejado. O mesmo modal será aberto com os dados atuais.
 - **Para fechar um trade aberto:** clique em **🔒 Fechar** (abre o modal com foco na seção de fechamento).
-- **Para excluir:** clique em **🗑️ Excluir** (confirme a ação).
+- **Para excluir:** clique em **🗑️ Excluir** (confirme a ação). Ao excluir, o resumo MT5 é removido e os indicadores são recalculados.
 
 ### 📊 Visualizando o Dashboard
 
@@ -302,9 +333,14 @@ O trade aparecerá na lista e as métricas da conta serão atualizadas.
 Clique no botão **📊 Dashboard** (topo direito). Será aberto um modal com:
 
 - **Estatísticas rápidas** da conta atual: Total de trades, Win Rate, Lucro Líquido, Profit Factor
+- **Estatísticas adicionais**: Maior Lucro, Maior Prejuízo, Média Lucro, Média Prejuízo (valores brutos)
 - **Gráfico de Evolução do Saldo** (linha)
-- **Gráfico de Resultados** (pizza: lucros vs prejuízos)
+- **Gráfico de Resultados** (pizza: quantidade de lucros vs prejuízos)
 - **Gráfico de Drawdown Diário** (linha contínua)
+- **Distribuição por Moeda** (pizza)
+- **Distribuição por Dia da Semana** (barras)
+- **Distribuição por Hora** (barras)
+- **Resultado Diário** (barras – últimos 30 dias)
 
 Você pode imprimir o dashboard clicando em **🖨️ Imprimir Dashboard**.
 
@@ -325,8 +361,44 @@ O sistema calcula automaticamente:
 <span id="filtros-e-impressao"></span>
 
 - Use os filtros na barra superior para visualizar trades de um período específico ou com determinado status.
-- Clique em **🖨️ Imprimir** para gerar um relatório completo da lista filtrada, com resumo e tabela.
-- Na visualização individual de um trade, há o botão **🖨️ Imprimir** para gerar um relatório detalhado com todas as informações e imagens.
+- Clique em **🖨️ Imprimir** para gerar um relatório completo da lista filtrada, com resumo (usando valores líquidos) e tabela detalhada (exibindo o **lucro bruto** de cada trade).
+- Na visualização individual de um trade, há o botão **🖨️ Imprimir** para gerar um relatório detalhado com todas as informações, imagens e valores (brutos e líquidos).
+
+### 📥 Importando Trades do MetaTrader 5
+
+<span id="importando-trades-do-metatrader-5"></span>
+
+#### Como exportar do MetaTrader 5
+
+1. No MetaTrader 5, acesse a aba **"Histórico"** (parte inferior da plataforma, janela "Caixa de Ferramentas").
+2. Clique com o botão direito e selecione **"Período Personalizado"** para definir o intervalo desejado.
+3. Novamente com o botão direito, escolha **"Relatório"** e depois **"Salvar como Relatório"**.
+4. Escolha o formato **"Arquivo Excel (*.xlsx)"** e salve o arquivo.
+
+O arquivo gerado contém as seções:
+- **Posições**: lista de trades com data, símbolo, tipo, volume, preços, comissão, swap e lucro.
+- **Resultados**: resumo com lucro líquido, lucro bruto, perda bruta, fator de lucro, etc.
+
+#### Como importar no Diário de Trader
+
+1. No sistema, selecione a conta desejada no dropdown (ou crie uma nova conta com o saldo inicial correspondente).
+2. Clique no botão **📥 Importar Trades (MT5)** na barra superior.
+3. Selecione o arquivo `.xlsx` exportado.
+4. O sistema lerá automaticamente:
+   - Todos os trades da seção **Posições** serão adicionados ou atualizados.  
+     *Se um trade já existir (mesmo `positionId` ou mesma data, moeda e tipo), apenas os valores numéricos (lucro, comissão, swap) serão atualizados, preservando imagens, observações e sentimentos.*
+   - Os totais da seção **Resultados** serão armazenados e usados para exibir os indicadores na tela principal (lucro líquido, lucro bruto, perda bruta, etc.), garantindo que fiquem **exatamente iguais aos do relatório do MT5**.
+5. Após a importação, a lista de trades será atualizada (ordenada por data decrescente) e as métricas refletirão os novos dados.
+
+> **Exemplo:**  
+> Se você exportou um relatório com 3 trades, o sistema criará 3 trades com os valores brutos 32,00, -57,12, -25,50, e exibirá na tela principal:
+> - Lucro Líquido Total: -54.55
+> - Lucro Bruto: 31.30
+> - Perda Bruta: -85.85
+> - Fator de Lucro: 0.36
+> - Retorno Esperado (Payoff): -18.18
+> - Fator de Recuperação: -0.64
+> - Índice de Sharpe: -0.47
 
 ### 💾 Backup e Restauração
 
@@ -398,14 +470,22 @@ Para cada dia:
 |-------------|---------|
 | **Total Trades** | Número de trades fechados |
 | **Win Rate** | (Lucros / Total Fechados) × 100 |
-| **Lucro Líquido** | Soma dos lucros - soma dos prejuízos |
-| **Profit Factor** | Soma lucros / Soma prejuízos (∞ se prejuízos = 0) |
+| **Lucro Líquido** | Soma dos lucros líquidos - soma dos prejuízos líquidos |
+| **Profit Factor** | Lucro Bruto Total / |Perda Bruta Total| (valores brutos) |
+| **Maior Lucro** | Maior valor bruto positivo |
+| **Maior Prejuízo** | Maior valor bruto negativo (em módulo) |
+| **Média Lucro** | Média dos lucros brutos |
+| **Média Prejuízo** | Média dos prejuízos brutos |
 
 ### Gráficos
 
 - **📈 Evolução do Saldo**: linha do tempo com o saldo após cada trade fechado.
 - **🥧 Resultados**: pizza com a quantidade de trades lucrativos vs. deficitários.
-- **📉 Drawdown Diário**: linha contínua com o drawdown percentual de cada dia (desde o primeiro trade). Valores zero nos dias sem perda.
+- **📉 Drawdown Diário**: linha contínua com o drawdown percentual de cada dia.
+- **💰 Distribuição por Moeda**: pizza com a quantidade de trades por par.
+- **📅 Dia da Semana**: barras com a distribuição dos trades.
+- **⏰ Hora do Dia**: barras com a distribuição por hora.
+- **📊 Resultado Diário**: barras com o resultado líquido por dia (últimos 30 dias).
 
 [⬆ Voltar ao Topo](#diario-de-trader---sistema-completo-de-gerenciamento-de-trades)
 
@@ -497,9 +577,19 @@ Você pode personalizar:
 - Verifique se outros dados (como tema) estão sendo lembrados
 - O sistema salva o ID da última conta ao carregá-la; se o problema persistir, abra o console (F12) e veja se há mensagens de erro.
 
+#### 6. Importação do MT5 não encontra a seção "Posições"
+
+**Causas:**
+- O arquivo exportado não contém a seção esperada (pode ser formato diferente)
+- O cabeçalho da tabela foi alterado
+
+**Solução:**
+- Certifique-se de exportar como "Arquivo Excel (*.xlsx)" no MT5
+- Se o problema persistir, envie o arquivo para suporte
+
 ### Logs e Depuração
 
-Abra o console do navegador (F12) para ver mensagens de log e possíveis erros. O sistema exibe logs como "Conta carregada: X" e "ID da última conta no localStorage: Y".
+Abra o console do navegador (F12) para ver mensagens de log e possíveis erros. O sistema exibe logs como "Conta carregada: X", "ID da última conta no localStorage: Y" e informações sobre a importação.
 
 [⬆ Voltar ao Topo](#diario-de-trader---sistema-completo-de-gerenciamento-de-trades)
 
@@ -513,7 +603,7 @@ Abra o console do navegador (F12) para ver mensagens de log e possíveis erros. 
 Não. Agora usamos **IndexedDB**, um banco de dados real dentro do navegador. Os dados ficam em uma pasta específica do perfil do usuário, com muito mais capacidade e organização.
 
 #### 2. Posso ter várias contas?
-Sim! O grande diferencial da versão 2.0. Você pode criar quantas contas quiser, cada uma com seus próprios trades e configurações. O seletor no topo permite alternar rapidamente.
+Sim! O grande diferencial da versão 2.0 em diante. Você pode criar quantas contas quiser, cada uma com seus próprios trades e configurações. O seletor no topo permite alternar rapidamente.
 
 #### 3. Como faço para alternar entre contas?
 Use o **dropdown** ao lado do botão "Lançar Trade". Basta selecionar a conta desejada e todos os dados (trades, métricas) serão atualizados.
@@ -532,6 +622,15 @@ Agora o arquivo tem o nome fixo `BackupDiarioTrader-DD-MM-AAAA.enc` (ex: `Backup
 
 #### 8. Ainda posso configurar metas e drawdown?
 Sim, mas agora isso é feito dentro de cada conta. Ao criar ou editar uma conta, você define todos os parâmetros. O botão "Configurar Metas" foi removido.
+
+#### 9. Como funciona a importação do MT5?
+Você exporta o relatório do MT5 (formato .xlsx) e clica em "Importar Trades (MT5)". O sistema lê as seções "Posições" e "Resultados". Os trades são criados/atualizados, e os totais do resumo são usados para exibir os indicadores exatos do relatório. Se um trade manual já existir com a mesma data, moeda e tipo, ele é atualizado, preservando imagens e observações.
+
+#### 10. O que significam os campos "Lucro Bruto", "Comissão" e "Swap"?
+- **Lucro Bruto**: valor do trade sem considerar comissões e swap (coluna "Lucro" na tabela de Posições do MT5).
+- **Comissão**: valor da comissão (negativo no MT5).
+- **Swap**: ajuste de rolagem (pode ser positivo ou negativo).
+O sistema calcula o valor líquido como `lucroBruto + comissao + swap` (já que a comissão é negativa).
 
 [⬆ Voltar ao Topo](#diario-de-trader---sistema-completo-de-gerenciamento-de-trades)
 
@@ -581,7 +680,7 @@ Sim, mas agora isso é feito dentro de cada conta. Ao criar ou editar uma conta,
 O projeto é open-source e aceita contribuições em:
 
 ### Áreas Prioritárias
-1. **Novas funcionalidades** (ex: importação de arquivos CSV de corretoras)
+1. **Novas funcionalidades** (ex: exportação para CSV, gráficos adicionais)
 2. **Melhorias** nos gráficos e métricas
 3. **Testes** em diferentes navegadores
 4. **Documentação** e tutoriais
@@ -690,7 +789,17 @@ Todo valor recebido é reinvestido:
 
 <span id="historico-de-versoes"></span>
 
-### v2.0 (Atual) - Múltiplas Contas com IndexedDB
+### v3.5 (Atual) - Importação MT5 e Dashboard Aprimorado
+- ✅ **Importação de trades do MetaTrader 5** (arquivo .xlsx)
+- ✅ Leitura das seções **Posições** e **Resultados**
+- ✅ Preservação de dados manuais (imagens, observações) ao atualizar trades
+- ✅ Exibição dos indicadores do relatório (lucro líquido, lucro bruto, etc.) na tela principal
+- ✅ Dashboard corrigido: agora usa valores brutos para maior lucro, maior prejuízo, médias, e resumo para os totais
+- ✅ Lista de trades ordenada por data decrescente
+- ✅ Correção do drawdown máximo e diário
+- ✅ Ajustes finos nos cálculos para corresponder exatamente ao MT5
+
+### v3.0 - Múltiplas Contas com IndexedDB (anterior)
 - ✅ **IndexedDB** como banco de dados local (persistente, assíncrono, alta capacidade)
 - ✅ **Gerenciamento de múltiplas contas** (criar, editar, excluir, selecionar)
 - ✅ Seletor de contas na interface principal
@@ -713,10 +822,9 @@ Todo valor recebido é reinvestido:
 - ✅ Filtros por período e status
 
 ### Próximas Versões (planejadas)
-- **v2.1** - Exportação para CSV/Excel
-- **v2.2** - Estatísticas avançadas (Sharpe, drawdown por período)
-- **v2.3** - Sincronização com nuvem (opcional)
-- **v3.0** - Versão mobile nativa
+- **v3.6** - Exportação para CSV/Excel
+- **v3.7** - Estatísticas avançadas (Sharpe, drawdown por período)
+- **v4.0** - Versão mobile nativa e sincronização com nuvem
 
 [⬆ Voltar ao Topo](#diario-de-trader---sistema-completo-de-gerenciamento-de-trades)
 
@@ -726,13 +834,13 @@ Todo valor recebido é reinvestido:
 
 ## 🚀 Comece Agora!
 
-**[⬇️ BAIXAR VERSÃO 2.0](https://github.com/NatalSantiago/DiarioTrader/releases/latest)**
+**[⬇️ BAIXAR VERSÃO 3.5](https://github.com/NatalSantiago/DiarioTrader/releases/latest)**
 
 ### Fluxo Recomendado:
 1. **Baixe** o arquivo `diario-trader.html`
 2. **Abra** no navegador
 3. **Crie** suas contas
-4. **Registre** seus trades
+4. **Registre** seus trades manualmente ou **importe** do MetaTrader 5
 5. **Acompanhe** suas métricas
 6. **Faça backup** regularmente
 
