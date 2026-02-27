@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>Diário de Trader - v3.5 (ordenado e dashboard corrigido)</title>
+    <title>Diário de Trader - v4.1</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://i.ibb.co/svX1wDjK/Logo-Diario.png">
     <!-- SweetAlert2, CryptoJS, Chart.js, SheetJS (XLSX) -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <style>
         /* ========== CSS ORIGINAL COMPLETO ========== */
@@ -689,7 +690,7 @@
     <div class="dashboard" id="app">
         <!-- top bar tema + backups + dashboard + gerenciar contas + importar -->
         <div class="top-bar">
-            <div class="logo"><h1>◉ DIÁRIO DE TRADER - v3.5</h1></div>
+            <div class="logo"><h1>◉ DIÁRIO DE TRADER - v4.1</h1></div>
             <div style="display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap;">
                 <button class="dashboard-btn" id="dashboardButton">📊 Dashboard</button>
                 <button class="backup-btn" id="gerenciarContasBtn">📋 Gerenciar Contas</button>
@@ -721,33 +722,33 @@
                     🎯 Meta <span id="metaPercentLabel">10%</span>
                     <span id="metaStatusText">(falta)</span>
                 </div>
-                <div class="card-value" id="metaFalta">U$ 563,31</div>
+                <div class="card-value" id="metaFalta">U$ 565,98</div>
                 <div class="progress-meta" id="progressMeta">⬆️ Faltam 11.3% para 10%</div>
             </div>
             <div class="card"><div class="card-label">📉 Drawdown Máx <span id="ddMaxLabel">7%</span></div><div class="card-value" id="ddMax">1.9%</div><div class="badge" id="ddMaxStatus">seguro</div></div>
             <div class="card"><div class="card-label">✅ Positivos (líquido)</div><div class="card-value" id="totalPos">1</div></div>
-            <div class="card"><div class="card-label">❌ Negativos (líquido)</div><div class="card-value" id="totalNeg">3</div></div>
+            <div class="card"><div class="card-label">❌ Negativos (líquido)</div><div class="card-value" id="totalNeg">4</div></div>
         </div>
 
         <!-- divisor + métricas diárias -->
         <div class="divider"></div>
         <div style="display: flex; flex-wrap: wrap; gap: 1.2rem; align-items: baseline; margin-bottom: 1rem;">
-            <span class="badge" style="font-size: 1rem;">📅 trades hoje: <strong id="tradesHoje">1</strong></span>
+            <span class="badge" style="font-size: 1rem;">📅 trades hoje: <strong id="tradesHoje">2</strong></span>
             <span class="badge" id="dailyDrawdownBadge" style="background: var(--danger-bg);">📉 Drawdown diário: <strong id="ddDiario">0%</strong> / <span id="ddDiarioLimite">2%</span></span>
             <span class="badge" style="background: var(--success-bg);">📈 Positivos hoje: <strong id="posHoje">0</strong></span>
-            <span class="badge" style="background: var(--danger-bg);">📉 Negativos hoje: <strong id="negHoje">1</strong></span>
-            <span class="badge" style="background: var(--surface);">💰 Saldo atual: <strong id="saldoAtual">U$ 4.936,69</strong></span>
+            <span class="badge" style="background: var(--danger-bg);">📉 Negativos hoje: <strong id="negHoje">2</strong></span>
+            <span class="badge" style="background: var(--surface);">💰 Saldo atual: <strong id="saldoAtual">U$ 4.934,02</strong></span>
         </div>
 
         <!-- Indicadores do MT5 -->
         <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; padding: 0.5rem; background: var(--surface); border-radius: 2rem; justify-content: center;">
-            <span class="badge" style="background: var(--bg-card);">📉 Lucro Líquido Total: <strong id="lucroLiquidoTotal">-63.31</strong></span>
+            <span class="badge" style="background: var(--bg-card);">📉 Lucro Líquido Total: <strong id="lucroLiquidoTotal">-65.98</strong></span>
             <span class="badge" style="background: var(--bg-card);">📈 Lucro Bruto: <strong id="lucroBrutoTotal">31.30</strong></span>
-            <span class="badge" style="background: var(--bg-card);">📉 Perda Bruta: <strong id="perdaBrutaTotal">-94.61</strong></span>
-            <span class="badge" style="background: var(--bg-card);">📊 Fator de Lucro: <strong id="fatorLucro">0.33</strong></span>
-            <span class="badge" style="background: var(--bg-card);">📊 Retorno Esperado (Payoff): <strong id="retornoEsperado">-15.83</strong></span>
-            <span class="badge" style="background: var(--bg-card);">📊 Fator de Recuperação: <strong id="fatorRecuperacao">-0.67</strong></span>
-            <span class="badge" style="background: var(--bg-card);">📊 Índice de Sharpe: <strong id="indiceSharpe">-0.48</strong></span>
+            <span class="badge" style="background: var(--bg-card);">📉 Perda Bruta: <strong id="perdaBrutaTotal">-97.28</strong></span>
+            <span class="badge" style="background: var(--bg-card);">📊 Fator de Lucro: <strong id="fatorLucro">0.32</strong></span>
+            <span class="badge" style="background: var(--bg-card);">📊 Retorno Esperado (Payoff): <strong id="retornoEsperado">-13.20</strong></span>
+            <span class="badge" style="background: var(--bg-card);">📊 Fator de Recuperação: <strong id="fatorRecuperacao">-0.68</strong></span>
+            <span class="badge" style="background: var(--bg-card);">📊 Índice de Sharpe: <strong id="indiceSharpe">-0.44</strong></span>
         </div>
 
         <!-- FILTROS AVANÇADOS -->
@@ -869,10 +870,8 @@
                 if (valor === null || valor === undefined || isNaN(valor)) return 'U$ 0,00';
                 let valorStr = valor.toFixed(2);
                 let partes = valorStr.split('.');
-                let inteiro = partes[0];
-                let decimal = partes[1];
-                inteiro = inteiro.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                return `U$ ${inteiro},${decimal}`;
+                let inteiro = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                return `U$ ${inteiro},${partes[1]}`;
             }
 
             // ========== FUNÇÕES DE INICIALIZAÇÃO DO BANCO ==========
@@ -2359,7 +2358,7 @@
                 };
             }
 
-            // ========== DASHBOARD MODAL (CORRIGIDO PARA USAR VALORES BRUTOS E RESUMO) ==========
+            // ========== DASHBOARD MODAL (COM RÓTULOS DE VALORES BRUTOS) ==========
             let chartEvolucao, chartPizza, chartDrawdown, chartMoeda, chartDiaSemana, chartHora, chartResultadoDiario;
 
             document.getElementById('dashboardButton').addEventListener('click', () => {
@@ -2376,12 +2375,10 @@
                 // Valores líquidos para lucro líquido (usar resumo se disponível)
                 const indicadores = obterIndicadores(); // já usa resumo
                 const lucroLiquido = indicadores.lucroLiquido;
-                const lucroBrutoTotal = indicadores.lucroBruto;
-                const perdaBrutaTotal = indicadores.perdaBruta;
                 
                 const winRate = totalTrades ? (lucros.length / totalTrades * 100).toFixed(1) : 0;
                 
-                // Valores brutos para as estatísticas (não vêm do resumo)
+                // Valores brutos para as estatísticas (calculados diretamente dos trades)
                 const lucrosBrutos = lucros.map(t => t.lucroBruto || 0);
                 const prejuizosBrutos = prejuizos.map(t => t.lucroBruto || 0);
                 const totalLucroBruto = lucrosBrutos.reduce((acc, v) => acc + v, 0);
@@ -2395,8 +2392,12 @@
                 const mediaLucro = lucrosBrutos.length ? (totalLucroBruto / lucrosBrutos.length) : 0;
                 const mediaPrejuizo = prejuizosBrutos.length ? (totalPrejuizoBruto / prejuizosBrutos.length) : 0;
 
+                // Dados para gráfico de pizza com rótulos personalizados (usando valores brutos)
                 const pizzaData = {
-                    labels: ['Lucros', 'Prejuízos'],
+                    labels: [
+                        `Lucros (${lucros.length} trade${lucros.length !== 1 ? 's' : ''})`,
+                        `Prejuízos (${prejuizos.length} trade${prejuizos.length !== 1 ? 's' : ''})`
+                    ],
                     datasets: [{
                         data: [lucros.length, prejuizos.length],
                         backgroundColor: ['#10b981', '#ef4444'],
@@ -2495,11 +2496,12 @@
                     horaCount[hora]++;
                 });
 
+                // Para o gráfico de resultado diário, agrupar por dia e somar os valores brutos
                 const resultadoPorDia = {};
                 tradesFechados.forEach(t => {
                     const dia = t.dataEntrada.slice(0,10);
                     if (!resultadoPorDia[dia]) resultadoPorDia[dia] = 0;
-                    resultadoPorDia[dia] += t.valor || 0;
+                    resultadoPorDia[dia] += t.lucroBruto || 0; // usar bruto
                 });
                 const diasOrdenados = Object.keys(resultadoPorDia).sort();
                 const valoresDiarios = diasOrdenados.map(d => resultadoPorDia[d]);
@@ -2634,12 +2636,22 @@
                                 responsive: true,
                                 maintainAspectRatio: false,
                                 animation: false,
-                                plugins: { legend: { display: false } },
+                                plugins: {
+                                    legend: { display: false },
+                                    datalabels: {
+                                        color: '#fff',
+                                        formatter: (value) => formatarMoeda(value),
+                                        anchor: 'end',
+                                        align: 'top',
+                                        offset: 4
+                                    }
+                                },
                                 scales: {
                                     y: { beginAtZero: false, grid: { color: 'rgba(255,255,255,0.1)' } },
                                     x: { grid: { display: false } }
                                 }
-                            }
+                            },
+                            plugins: [ChartDataLabels]
                         });
 
                         const ctxPizza = document.getElementById('chart-pizza').getContext('2d');
@@ -2651,9 +2663,21 @@
                                 maintainAspectRatio: false,
                                 animation: false,
                                 plugins: {
-                                    legend: { position: 'bottom', labels: { color: 'var(--text-primary)' } }
+                                    legend: { position: 'bottom', labels: { color: 'var(--text-primary)' } },
+                                    datalabels: {
+                                        color: '#fff',
+                                        formatter: (value, context) => {
+                                            const index = context.dataIndex;
+                                            const total = index === 0 ? totalLucroBruto : totalPrejuizoBruto;
+                                            return `${value} trade${value !== 1 ? 's' : ''}\n${formatarMoeda(total)}`;
+                                        },
+                                        font: { weight: 'bold', size: 11 },
+                                        align: 'center',
+                                        anchor: 'center'
+                                    }
                                 }
-                            }
+                            },
+                            plugins: [ChartDataLabels]
                         });
 
                         const ctxDrawdown = document.getElementById('chart-drawdown').getContext('2d');
@@ -2674,12 +2698,22 @@
                                 responsive: true,
                                 maintainAspectRatio: false,
                                 animation: false,
-                                plugins: { legend: { display: false } },
+                                plugins: {
+                                    legend: { display: false },
+                                    datalabels: {
+                                        color: '#fff',
+                                        formatter: (value) => value.toFixed(1) + '%',
+                                        anchor: 'end',
+                                        align: 'top',
+                                        offset: 4
+                                    }
+                                },
                                 scales: {
                                     y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' } },
                                     x: { grid: { display: false } }
                                 }
-                            }
+                            },
+                            plugins: [ChartDataLabels]
                         });
 
                         const ctxMoeda = document.getElementById('chart-moeda').getContext('2d');
@@ -2702,9 +2736,15 @@
                                 maintainAspectRatio: false,
                                 animation: false,
                                 plugins: {
-                                    legend: { position: 'bottom', labels: { color: 'var(--text-primary)' } }
+                                    legend: { position: 'bottom', labels: { color: 'var(--text-primary)' } },
+                                    datalabels: {
+                                        color: '#fff',
+                                        formatter: (value) => value,
+                                        font: { weight: 'bold' }
+                                    }
                                 }
-                            }
+                            },
+                            plugins: [ChartDataLabels]
                         });
 
                         const ctxDiaSemana = document.getElementById('chart-diasemana').getContext('2d');
@@ -2723,12 +2763,22 @@
                                 responsive: true,
                                 maintainAspectRatio: false,
                                 animation: false,
-                                plugins: { legend: { display: false } },
+                                plugins: {
+                                    legend: { display: false },
+                                    datalabels: {
+                                        color: '#fff',
+                                        formatter: (value) => value,
+                                        anchor: 'end',
+                                        align: 'top',
+                                        offset: 4
+                                    }
+                                },
                                 scales: {
                                     y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' } },
                                     x: { grid: { display: false } }
                                 }
-                            }
+                            },
+                            plugins: [ChartDataLabels]
                         });
 
                         const ctxHora = document.getElementById('chart-hora').getContext('2d');
@@ -2747,12 +2797,22 @@
                                 responsive: true,
                                 maintainAspectRatio: false,
                                 animation: false,
-                                plugins: { legend: { display: false } },
+                                plugins: {
+                                    legend: { display: false },
+                                    datalabels: {
+                                        color: '#fff',
+                                        formatter: (value) => value,
+                                        anchor: 'end',
+                                        align: 'top',
+                                        offset: 4
+                                    }
+                                },
                                 scales: {
                                     y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' } },
                                     x: { grid: { display: false } }
                                 }
-                            }
+                            },
+                            plugins: [ChartDataLabels]
                         });
 
                         const ctxResultadoDiario = document.getElementById('chart-resultadodiario').getContext('2d');
@@ -2771,61 +2831,137 @@
                                 responsive: true,
                                 maintainAspectRatio: false,
                                 animation: false,
-                                plugins: { legend: { display: false } },
+                                plugins: {
+                                    legend: { display: false },
+                                    datalabels: {
+                                        color: '#fff',
+                                        formatter: (value) => formatarMoeda(value),
+                                        anchor: 'end',
+                                        align: 'top',
+                                        offset: 4
+                                    }
+                                },
                                 scales: {
                                     y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' } },
                                     x: { grid: { display: false } }
                                 }
-                            }
+                            },
+                            plugins: [ChartDataLabels]
                         });
 
                         document.getElementById('dashboard-imprimir').addEventListener('click', () => {
-                            const evolucaoURL = chartEvolucao.toBase64Image();
-                            const pizzaURL = chartPizza.toBase64Image();
-                            const drawdownURL = chartDrawdown.toBase64Image();
-                            const moedaURL = chartMoeda.toBase64Image();
-                            const diaSemanaURL = chartDiaSemana.toBase64Image();
-                            const horaURL = chartHora.toBase64Image();
-
-                            imprimirDashboardCompleto(
+                            // Em vez de capturar imagens, chamamos uma função que recria os gráficos no documento de impressão
+                            imprimirDashboardRecriado(
                                 totalTrades, winRate, lucroLiquido, profitFactor,
                                 maiorLucro, maiorPrejuizo, mediaLucro, mediaPrejuizo,
-                                evolucaoURL, pizzaURL, drawdownURL,
-                                moedaURL, diaSemanaURL, horaURL
+                                datasEvolucao, saldosEvolucao,
+                                lucros.length, prejuizos.length, totalLucroBruto, totalPrejuizoBruto,
+                                datasDrawdown, valoresDrawdown,
+                                moedaLabels, moedaData,
+                                diasExibir, valoresExibir
                             );
-                        });
+                        });                        
                     }
                 });
             }
 
-            function imprimirDashboardCompleto(
+            // ========== FUNÇÃO QUE RECRIA OS GRÁFICOS NO DOCUMENTO DE IMPRESSÃO EM DUAS PÁGINAS ==========
+            function imprimirDashboardRecriado(
                 totalTrades, winRate, lucroLiquido, profitFactor,
                 maiorLucro, maiorPrejuizo, mediaLucro, mediaPrejuizo,
-                evolucaoURL, pizzaURL, drawdownURL,
-                moedaURL, diaSemanaURL, horaURL
+                datasEvolucao, saldosEvolucao,
+                qtdLucros, qtdPrejuizos, totalLucroBruto, totalPrejuizoBruto,
+                datasDrawdown, valoresDrawdown,
+                moedaLabels, moedaData,
+                diasExibir, valoresExibir
             ) {
-                const estilo = `
+                const estilos = `
                     <style>
-                        @page { size: landscape; margin: 0.8cm; }
-                        body { font-family: 'Inter', sans-serif; padding: 0; color: #000; background: #fff; margin: 0; font-size: 12px; }
-                        h1 { color: #2563eb; margin-bottom: 0.3rem; font-size: 1.8rem; text-align: center; }
-                        .stats-grid { display: flex; gap: 1rem; justify-content: center; margin-bottom: 0.5rem; flex-wrap: wrap; }
-                        .stat-item { text-align: center; min-width: 100px; }
-                        .stat-value { font-size: 1.2rem; font-weight: 600; color: #2563eb; }
-                        .stat-label { font-size: 0.6rem; text-transform: uppercase; color: #4b5563; }
-                        .chart-row { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 0.8rem; }
-                        .chart-box { flex: 1 1 300px; text-align: center; border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 0.5rem; background: #f9fafb; }
-                        .chart-box img { max-width: 100%; height: auto; max-height: 160px; object-fit: contain; }
-                        .chart-box h3 { margin: 0 0 0.3rem 0; font-size: 0.9rem; color: #1e293b; }
-                        .footer { margin-top: 0.5rem; text-align: right; color: #6b7280; font-size: 0.6rem; }
-                        .page-break { page-break-before: always; }
+                        @page { size: landscape; margin: 0.3cm; }
+                        body { 
+                            font-family: Arial, Helvetica, sans-serif; 
+                            margin: 0; 
+                            padding: 0; 
+                            color: #000; 
+                            background: #fff; 
+                            font-size: 11pt;
+                            width: 100%;
+                            height: 100vh;
+                            display: flex;
+                            flex-direction: column;
+                        }
+                        h1 { 
+                            color: #2563eb; 
+                            font-size: 18pt; 
+                            text-align: center; 
+                            margin: 0 0 5px 0; 
+                            padding: 0;
+                        }
+                        .stats-grid { 
+                            display: flex; 
+                            flex-wrap: wrap; 
+                            justify-content: center; 
+                            gap: 8px; 
+                            margin: 5px 0; 
+                        }
+                        .stat-item { 
+                            text-align: center; 
+                            border: 1px solid #ccc; 
+                            border-radius: 4px; 
+                            padding: 3px 8px; 
+                            background: #f5f5f5; 
+                            min-width: 70px;
+                        }
+                        .stat-value { 
+                            font-size: 14pt; 
+                            font-weight: bold; 
+                            color: #2563eb; 
+                        }
+                        .stat-label { 
+                            font-size: 7pt; 
+                            text-transform: uppercase; 
+                            color: #333; 
+                        }
+                        .page {
+                            page-break-after: always;
+                            height: 100vh;
+                            display: flex;
+                            flex-direction: column;
+                            padding: 5px;
+                            box-sizing: border-box;
+                        }
+                        .page:last-child {
+                            page-break-after: auto;
+                        }
+                        .chart-container { 
+                            flex: 1;
+                            min-height: 0;
+                            margin: 5px 0;
+                            position: relative; 
+                            page-break-inside: avoid;
+                        }
+                        canvas { 
+                            width: 100% !important; 
+                            height: 100% !important; 
+                        }
+                        .footer { 
+                            text-align: right; 
+                            font-size: 8pt; 
+                            color: #666; 
+                            margin-top: 5px; 
+                            border-top: 1px solid #ccc; 
+                            padding-top: 3px; 
+                            page-break-before: avoid;
+                        }
                     </style>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"><\/script>
+                    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"><\/script>
                 `;
 
-                const html = `
+                const conteudoHTML = `
                     <!DOCTYPE html>
                     <html>
-                    <head><title>Dashboard Completo</title>${estilo}</head>
+                    <head><title>Dashboard Completo</title>${estilos}</head>
                     <body>
                         <h1>📊 Dashboard de Performance</h1>
                         
@@ -2843,33 +2979,205 @@
                             <div class="stat-item"><div class="stat-value">${formatarMoeda(mediaPrejuizo)}</div><div class="stat-label">Média Prejuízo</div></div>
                         </div>
 
-                        <div class="chart-row">
-                            <div class="chart-box"><h3>📈 Evolução do Saldo</h3><img src="${evolucaoURL}" alt="Evolução"></div>
-                            <div class="chart-box"><h3>🥧 Resultados</h3><img src="${pizzaURL}" alt="Resultados"></div>
-                            <div class="chart-box"><h3>📉 Drawdown Diário</h3><img src="${drawdownURL}" alt="Drawdown"></div>
+                        <!-- Página 1 -->
+                        <div class="page">
+                            <div class="chart-container">
+                                <canvas id="evolucaoChart"></canvas>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="drawdownChart"></canvas>
+                            </div>
                         </div>
 
-                        <div class="chart-row">
-                            <div class="chart-box"><h3>💰 Distribuição por Moeda</h3><img src="${moedaURL}" alt="Moeda"></div>
-                            <div class="chart-box"><h3>📅 Dia da Semana</h3><img src="${diaSemanaURL}" alt="Dia Semana"></div>
-                            <div class="chart-box"><h3>⏰ Distribuição por Hora</h3><img src="${horaURL}" alt="Hora"></div>
+                        <!-- Página 2 -->
+                        <div class="page">
+                            <div class="chart-container">
+                                <canvas id="resultadoDiarioChart"></canvas>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="pizzaChart"></canvas>
+                            </div>
+                            <div class="footer">
+                                Gerado em ${new Date().toLocaleString('pt-BR')}
+                            </div>
+
                         </div>
 
-                        <div class="footer">
-                            Gerado em ${new Date().toLocaleString('pt-BR')}
-                        </div>
+
+                        <script>
+                            // Registrar o plugin
+                            Chart.register(ChartDataLabels);
+
+                            // Função auxiliar para formatar moeda
+                            function formatarMoeda(valor) {
+                                if (valor === null || valor === undefined || isNaN(valor)) return 'U$ 0,00';
+                                var valorStr = valor.toFixed(2);
+                                var partes = valorStr.split('.');
+                                var inteiro = partes[0].replace(/\\B(?=(\\d{3})+(?!\\d))/g, '.');
+                                return 'U$ ' + inteiro + ',' + partes[1];
+                            }
+
+                            // Gráfico de Evolução (Página 1 - superior)
+                            new Chart(document.getElementById('evolucaoChart'), {
+                                type: 'line',
+                                data: {
+                                    labels: ${JSON.stringify(datasEvolucao)},
+                                    datasets: [{
+                                        label: 'Saldo (U$)',
+                                        data: ${JSON.stringify(saldosEvolucao)},
+                                        borderColor: '#3b82f6',
+                                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                        tension: 0.1,
+                                        fill: true
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    animation: false,
+                                    plugins: {
+                                        legend: { display: false },
+                                        title: { display: true, text: '📈 Evolução do Saldo' },
+                                        datalabels: {
+                                            color: '#000',
+                                            formatter: function(value) {
+                                                return formatarMoeda(value);
+                                            },
+                                            anchor: 'end',
+                                            align: 'top',
+                                            offset: 4,
+                                            font: { weight: 'bold', size: 9 }
+                                        }
+                                    },
+                                    scales: {
+                                        y: { beginAtZero: false, grid: { color: 'rgba(0,0,0,0.1)' } },
+                                        x: { grid: { display: false } }
+                                    }
+                                }
+                            });
+
+                            // Gráfico de Drawdown Diário (Página 1 - inferior)
+                            new Chart(document.getElementById('drawdownChart'), {
+                                type: 'line',
+                                data: {
+                                    labels: ${JSON.stringify(datasDrawdown)},
+                                    datasets: [{
+                                        label: 'Drawdown Diário (%)',
+                                        data: ${JSON.stringify(valoresDrawdown)},
+                                        borderColor: '#ef4444',
+                                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                        tension: 0.1,
+                                        fill: true
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    animation: false,
+                                    plugins: {
+                                        legend: { display: false },
+                                        title: { display: true, text: '📉 Drawdown Diário' },
+                                        datalabels: {
+                                            color: '#000',
+                                            formatter: function(value) {
+                                                return value.toFixed(1) + '%';
+                                            },
+                                            anchor: 'end',
+                                            align: 'top',
+                                            offset: 4,
+                                            font: { weight: 'bold', size: 9 }
+                                        }
+                                    },
+                                    scales: {
+                                        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.1)' } },
+                                        x: { grid: { display: false } }
+                                    }
+                                }
+                            });
+
+                            // Gráfico de Resultado Diário (Página 2 - superior)
+                            new Chart(document.getElementById('resultadoDiarioChart'), {
+                                type: 'bar',
+                                data: {
+                                    labels: ${JSON.stringify(diasExibir)},
+                                    datasets: [{
+                                        label: 'Resultado (U$)',
+                                        data: ${JSON.stringify(valoresExibir)},
+                                        backgroundColor: ${JSON.stringify(valoresExibir.map(v => v >= 0 ? '#10b981' : '#ef4444'))},
+                                        borderRadius: 4
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    animation: false,
+                                    plugins: {
+                                        legend: { display: false },
+                                        title: { display: true, text: '📊 Resultado Diário (últimos 30 dias)' },
+                                        datalabels: {
+                                            color: '#000',
+                                            formatter: function(value) {
+                                                return formatarMoeda(value);
+                                            },
+                                            anchor: 'end',
+                                            align: 'top',
+                                            offset: 4,
+                                            font: { weight: 'bold', size: 9 }
+                                        }
+                                    },
+                                    scales: {
+                                        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.1)' } },
+                                        x: { grid: { display: false } }
+                                    }
+                                }
+                            });
+
+                            // Gráfico de Pizza (Resultados) (Página 2 - inferior)
+                            new Chart(document.getElementById('pizzaChart'), {
+                                type: 'doughnut',
+                                data: {
+                                    labels: ['Lucros (${qtdLucros})', 'Prejuízos (${qtdPrejuizos})'],
+                                    datasets: [{
+                                        data: [${qtdLucros}, ${qtdPrejuizos}],
+                                        backgroundColor: ['#10b981', '#ef4444'],
+                                        borderColor: ['#059669', '#b91c1c'],
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    animation: false,
+                                    plugins: {
+                                        legend: { position: 'bottom', labels: { color: '#333' } },
+                                        title: { display: true, text: '🥧 Resultados' },
+                                        datalabels: {
+                                            color: '#fff',
+                                            formatter: function(value, context) {
+                                                var total = context.dataIndex === 0 ? ${totalLucroBruto} : ${totalPrejuizoBruto};
+                                                return value + ' trade' + (value !== 1 ? 's' : '') + '\\n' + formatarMoeda(total);
+                                            },
+                                            font: { weight: 'bold', size: 10 },
+                                            align: 'center',
+                                            anchor: 'center'
+                                        }
+                                    }
+                                }
+                            });
+                        <\/script>
                     </body>
                     </html>
                 `;
 
                 const printWindow = window.open('', '_blank');
-                printWindow.document.write(html);
+                printWindow.document.write(conteudoHTML);
                 printWindow.document.close();
                 printWindow.onload = () => {
                     printWindow.focus();
                     printWindow.print();
                 };
             }
+
 
             // ========== GERENCIAMENTO DE CONTAS ==========
             document.getElementById('gerenciarContasBtn').addEventListener('click', () => {
