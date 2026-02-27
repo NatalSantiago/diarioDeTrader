@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>Diário de Trader - v4.1</title>
+    <title>Diário de Trader - v4.1 (impressão com todos os títulos)</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://i.ibb.co/svX1wDjK/Logo-Diario.png">
     <!-- SweetAlert2, CryptoJS, Chart.js, SheetJS (XLSX) -->
@@ -1970,7 +1970,7 @@
                 printWindow.print();
             }
 
-            // ========== IMPORTAÇÃO DE TRADES DO EXCEL (MT5) ==========
+            // ========== IMPORTAÇÃO DE TRADES DO EXCEL (MT5) - CORRIGIDA ==========
             document.getElementById('importarMT5Btn').addEventListener('click', () => {
                 document.getElementById('arquivoMT5').click();
             });
@@ -2045,10 +2045,11 @@
                             let atualizados = 0;
                             for (let i = cabecalhoPosicoes + 1; i < rows.length; i++) {
                                 const row = rows[i];
+                                // Para de ler quando encontrar a seção "Ordens"
                                 if (!row[0] || (row[0] && row[0].toString().trim() === 'Ordens')) break;
 
                                 const positionId = row[colIndex.position] ? row[colIndex.position].toString() : null;
-                                if (!positionId) continue;
+                                if (!positionId) continue; // se não tem positionId, pula (mas dificilmente ocorre)
 
                                 const ativo = row[colIndex.ativo] ? row[colIndex.ativo].toString().trim() : '';
                                 const tipo = row[colIndex.tipo] ? row[colIndex.tipo].toString().toLowerCase() : '';
@@ -2090,20 +2091,24 @@
                                 const valorLiquido = lucro + comissao + swap; // comissao já negativa
                                 const fechadoCom = valorLiquido > 0 ? 'Lucro' : (valorLiquido < 0 ? 'Prejuizo' : '');
 
+                                // ----- LÓGICA CORRIGIDA PARA ENCONTRAR TRADE EXISTENTE -----
                                 let existingIndex = -1;
+                                // 1. Tenta encontrar por positionId (único)
                                 if (positionId) {
                                     existingIndex = trades.findIndex(t => t.positionId === positionId);
                                 }
+                                // 2. Se não encontrou por positionId, tenta por data/hora exata + par + tipo
                                 if (existingIndex === -1) {
-                                    const dataDia = dataEntrada.slice(0,10);
                                     existingIndex = trades.findIndex(t => 
-                                        t.dataEntrada && t.dataEntrada.slice(0,10) === dataDia &&
+                                        t.dataEntrada === dataEntrada &&
                                         t.moeda === ativo &&
                                         t.tipoEntrada === tipoEntrada
                                     );
                                 }
+                                // Se ainda não encontrou, existingIndex permanece -1 e criaremos um novo trade.
 
                                 if (existingIndex !== -1) {
+                                    // Atualiza trade existente
                                     const trade = trades[existingIndex];
                                     trade.moeda = ativo;
                                     trade.dataEntrada = dataEntrada;
@@ -2121,6 +2126,7 @@
                                     trade.positionId = positionId;
                                     atualizados++;
                                 } else {
+                                    // Cria novo trade
                                     const novo = {
                                         id: Date.now() + Math.random() + positionId,
                                         positionId: positionId,
@@ -2198,6 +2204,7 @@
                         }
                     }
 
+                    // Atualiza a conta atual com os trades importados
                     if (!contaAtual) {
                         if (contas.length === 0) {
                             contaAtual = {
@@ -2997,12 +3004,11 @@
                             <div class="chart-container">
                                 <canvas id="pizzaChart"></canvas>
                             </div>
-                            <div class="footer">
-                                Gerado em ${new Date().toLocaleString('pt-BR')}
-                            </div>
-
                         </div>
 
+                        <div class="footer">
+                            Gerado em ${new Date().toLocaleString('pt-BR')}
+                        </div>
 
                         <script>
                             // Registrar o plugin
