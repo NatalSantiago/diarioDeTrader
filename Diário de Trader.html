@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>Diário de Trader - v4.1 (impressão com todos os títulos)</title>
+    <title>Diário de Trader - v4.1 (layout modal revisado)</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://i.ibb.co/svX1wDjK/Logo-Diario.png">
     <!-- SweetAlert2, CryptoJS, Chart.js, SheetJS (XLSX) -->
@@ -412,6 +412,21 @@
         .modal-row-3 {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+        .modal-row-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+        .modal-row-5 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+        .modal-row-6 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
             gap: 1rem;
         }
         .modal-actions {
@@ -1429,7 +1444,7 @@
                 });
             }
 
-            // ========== MODAL DE LANÇAMENTO/EDIÇÃO (COMPLETO COM IMAGENS) ==========
+            // ========== MODAL DE LANÇAMENTO/EDIÇÃO - NOVO LAYOUT ==========
             document.getElementById('lancarTradeBtn').addEventListener('click', () => {
                 abrirModalLancamento();
             });
@@ -1442,47 +1457,51 @@
                 const comissao = isEdicao ? (tradeParaEditar.comissao !== undefined ? tradeParaEditar.comissao : 0) : '';
                 const swap = isEdicao ? (tradeParaEditar.swap !== undefined ? tradeParaEditar.swap : 0) : '';
 
+                // NOVO LAYOUT - 5 LINHAS
                 const modalHtml = `
                     <div style="max-height: 70vh; overflow-y: auto; padding: 0.5rem;">
-                        <div class="modal-field">
-                            <label>Moeda</label>
-                            <select id="modal-moeda">
-                                <option value="EURUSD">EURUSD</option>
-                                <option value="USDJPY">USDJPY</option>
-                                <option value="GBPUSD">GBPUSD</option>
-                                <option value="AUDUSD">AUDUSD</option>
-                                <option value="USDCAD">USDCAD</option>
-                                <option value="NZDUSD">NZDUSD</option>
-                                <option value="USDCHF">USDCHF</option>
-                                <option value="CADUSD">CADUSD</option>
-                                <option value="XAUUSD">XAUUSD (ouro)</option>
-                                <option value="XAGUSD">XAGUSD (prata)</option>
-                                <option value="BTCUSD">BTCUSD</option>
-                                <option value="ETHUSD">ETHUSD</option>
-                            </select>
-                        </div>
-                        <div class="modal-field">
-                            <label>Data/Hora Entrada</label>
-                            <input type="datetime-local" id="modal-dataEntrada" value="${isEdicao ? tradeParaEditar.dataEntrada || now : now}">
-                        </div>
-                        <div class="modal-field">
-                            <label>Tipo entrada</label>
-                            <select id="modal-tipoEntrada">
-                                <option value="Compra" ${isEdicao && tradeParaEditar.tipoEntrada === 'Compra' ? 'selected' : ''}>Compra (Long)</option>
-                                <option value="Venda" ${isEdicao && tradeParaEditar.tipoEntrada === 'Venda' ? 'selected' : ''}>Venda (Short)</option>
-                            </select>
-                        </div>
-                        <div class="modal-row">
+                        <!-- Linha 1: Moeda, Data/Hora Entrada, Tipo Entrada, Preço Entrada -->
+                        <div class="modal-row-4">
+                            <div class="modal-field">
+                                <label>Moeda</label>
+                                <select id="modal-moeda">
+                                    <option value="EURUSD">EURUSD</option>
+                                    <option value="USDJPY">USDJPY</option>
+                                    <option value="GBPUSD">GBPUSD</option>
+                                    <option value="AUDUSD">AUDUSD</option>
+                                    <option value="USDCAD">USDCAD</option>
+                                    <option value="NZDUSD">NZDUSD</option>
+                                    <option value="USDCHF">USDCHF</option>
+                                    <option value="CADUSD">CADUSD</option>
+                                    <option value="XAUUSD">XAUUSD (ouro)</option>
+                                    <option value="XAGUSD">XAGUSD (prata)</option>
+                                    <option value="BTCUSD">BTCUSD</option>
+                                    <option value="ETHUSD">ETHUSD</option>
+                                </select>
+                            </div>
+                            <div class="modal-field">
+                                <label>Data/Hora Entrada</label>
+                                <input type="datetime-local" id="modal-dataEntrada" value="${isEdicao ? tradeParaEditar.dataEntrada || now : now}">
+                            </div>
+                            <div class="modal-field">
+                                <label>Tipo entrada</label>
+                                <select id="modal-tipoEntrada">
+                                    <option value="Compra" ${isEdicao && tradeParaEditar.tipoEntrada === 'Compra' ? 'selected' : ''}>Compra (Long)</option>
+                                    <option value="Venda" ${isEdicao && tradeParaEditar.tipoEntrada === 'Venda' ? 'selected' : ''}>Venda (Short)</option>
+                                </select>
+                            </div>
                             <div class="modal-field">
                                 <label>Preço entrada</label>
                                 <input type="number" step="any" id="modal-precoEntrada" placeholder="1.10520" value="${isEdicao ? tradeParaEditar.precoEntrada || '' : ''}">
                             </div>
+                        </div>
+
+                        <!-- Linha 2: Stop Loss, Take Profit, Lote, Sent. Abertura -->
+                        <div class="modal-row-4">
                             <div class="modal-field">
                                 <label>Stop Loss</label>
                                 <input type="number" step="any" id="modal-stopLoss" placeholder="1.10000" value="${isEdicao ? tradeParaEditar.stopLoss || '' : ''}">
                             </div>
-                        </div>
-                        <div class="modal-row">
                             <div class="modal-field">
                                 <label>Take Profit</label>
                                 <input type="number" step="any" id="modal-takeProfit" placeholder="1.11000" value="${isEdicao ? tradeParaEditar.takeProfit || '' : ''}">
@@ -1491,43 +1510,52 @@
                                 <label>Lote</label>
                                 <input type="number" step="0.01" id="modal-lote" placeholder="Ex: 0.10" value="${isEdicao ? tradeParaEditar.lote || '' : ''}">
                             </div>
-                        </div>
-                        
-                        <!-- Área de imagem de entrada -->
-                        <div class="modal-field">
-                            <label>📸 Imagem Entrada</label>
-                            <div class="modal-image-area">
-                                <input type="text" id="modal-imgEntradaNome" readonly placeholder="Cole a imagem (Ctrl+V)" style="flex: 1; background: transparent; border: none;" value="${isEdicao && tradeParaEditar.imgEntradaNome ? tradeParaEditar.imgEntradaNome : ''}">
-                                <img class="modal-image-preview" id="modal-previewEntrada" src="${isEdicao && tradeParaEditar.imgEntradaBase64 ? tradeParaEditar.imgEntradaBase64 : 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\' viewBox=\'0 0 24 24\' fill=\'%233b82f6\'%3E%3Crect width=\'24\' height=\'24\' fill=\'%232a313e\'/%3E%3Ctext x=\'4\' y=\'17\' fill=\'%23fff\' font-size=\'10\'%3E📸%3C/text%3E%3C/svg%3E'}" alt="preview">
-                                <button class="clear-image-btn" id="modal-limparImgEntrada" type="button">🗑️</button>
-                                <button class="zoom-image-btn" id="modal-zoomImgEntrada" type="button">🔍</button>
+                            <div class="modal-field">
+                                <label>Sent. Abertura</label>
+                                <select id="modal-sentimentoAbertura">
+                                    <option value="">-- Selecione --</option>
+                                    <option value="Confiança" ${isEdicao && tradeParaEditar.sentimentoAbertura === 'Confiança' ? 'selected' : ''}>Confiança</option>
+                                    <option value="Ansiedade" ${isEdicao && tradeParaEditar.sentimentoAbertura === 'Ansiedade' ? 'selected' : ''}>Ansiedade</option>
+                                    <option value="Neutro" ${isEdicao && tradeParaEditar.sentimentoAbertura === 'Neutro' ? 'selected' : ''}>Neutro</option>
+                                    <option value="Euforia" ${isEdicao && tradeParaEditar.sentimentoAbertura === 'Euforia' ? 'selected' : ''}>Euforia</option>
+                                    <option value="Medo" ${isEdicao && tradeParaEditar.sentimentoAbertura === 'Medo' ? 'selected' : ''}>Medo</option>
+                                    <option value="Dúvida" ${isEdicao && tradeParaEditar.sentimentoAbertura === 'Dúvida' ? 'selected' : ''}>Dúvida</option>
+                                </select>
                             </div>
                         </div>
 
-                        <div class="modal-field">
-                            <label>Observações abertura</label>
-                            <textarea id="modal-obsAbertura" rows="2" placeholder="notas da entrada...">${isEdicao ? tradeParaEditar.obsAbertura || '' : ''}</textarea>
+                        <!-- Linha 3: Imagem Entrada e Observações Abertura -->
+                        <div class="modal-row">
+                            <div class="modal-field">
+                                <label>📸 Imagem Entrada</label>
+                                <div class="modal-image-area">
+                                    <input type="text" id="modal-imgEntradaNome" readonly placeholder="Cole a imagem (Ctrl+V)" style="flex: 1; background: transparent; border: none;" value="${isEdicao && tradeParaEditar.imgEntradaNome ? tradeParaEditar.imgEntradaNome : ''}">
+                                    <img class="modal-image-preview" id="modal-previewEntrada" src="${isEdicao && tradeParaEditar.imgEntradaBase64 ? tradeParaEditar.imgEntradaBase64 : 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\' viewBox=\'0 0 24 24\' fill=\'%233b82f6\'%3E%3Crect width=\'24\' height=\'24\' fill=\'%232a313e\'/%3E%3Ctext x=\'4\' y=\'17\' fill=\'%23fff\' font-size=\'10\'%3E📸%3C/text%3E%3C/svg%3E'}" alt="preview">
+                                    <button class="clear-image-btn" id="modal-limparImgEntrada" type="button">🗑️</button>
+                                    <button class="zoom-image-btn" id="modal-zoomImgEntrada" type="button">🔍</button>
+                                </div>
+                            </div>
+                            <div class="modal-field">
+                                <label>Observações Abertura</label>
+                                <textarea id="modal-obsAbertura" rows="2" placeholder="notas da entrada...">${isEdicao ? tradeParaEditar.obsAbertura || '' : ''}</textarea>
+                            </div>
                         </div>
 
-                        <div class="modal-field">
-                            <label>😊 Sentimento na abertura</label>
-                            <select id="modal-sentimentoAbertura">
-                                <option value="">-- Selecione --</option>
-                                <option value="Confiança" ${isEdicao && tradeParaEditar.sentimentoAbertura === 'Confiança' ? 'selected' : ''}>Confiança</option>
-                                <option value="Ansiedade" ${isEdicao && tradeParaEditar.sentimentoAbertura === 'Ansiedade' ? 'selected' : ''}>Ansiedade</option>
-                                <option value="Neutro" ${isEdicao && tradeParaEditar.sentimentoAbertura === 'Neutro' ? 'selected' : ''}>Neutro</option>
-                                <option value="Euforia" ${isEdicao && tradeParaEditar.sentimentoAbertura === 'Euforia' ? 'selected' : ''}>Euforia</option>
-                                <option value="Medo" ${isEdicao && tradeParaEditar.sentimentoAbertura === 'Medo' ? 'selected' : ''}>Medo</option>
-                                <option value="Dúvida" ${isEdicao && tradeParaEditar.sentimentoAbertura === 'Dúvida' ? 'selected' : ''}>Dúvida</option>
-                            </select>
-                        </div>
-
+                        <!-- Separador Fechamento -->
                         <div style="border-left: 3px solid var(--accent); padding-left: 1rem; margin: 1rem 0;">
                             <span style="font-weight: 600;">🔒 Fechamento</span>
                         </div>
 
-                        <!-- Campos de Lucro Bruto, Comissão, Swap -->
-                        <div class="modal-row-3">
+                        <!-- Linha 4: Fechado Com, Lucro Bruto, Comissão, Swap, Data/Hora Fechamento, Sent. Fechamento -->
+                        <div class="modal-row-6">
+                            <div class="modal-field">
+                                <label>Fechado com</label>
+                                <select id="modal-fechadoCom">
+                                    <option value="">-- Selecione --</option>
+                                    <option value="Lucro" ${isEdicao && tradeParaEditar.fechadoCom === 'Lucro' ? 'selected' : ''}>Lucro</option>
+                                    <option value="Prejuizo" ${isEdicao && tradeParaEditar.fechadoCom === 'Prejuizo' ? 'selected' : ''}>Prejuízo</option>
+                                </select>
+                            </div>
                             <div class="modal-field">
                                 <label>Lucro Bruto (U$)</label>
                                 <input type="number" step="0.01" id="modal-lucroBruto" placeholder="0.00" value="${lucroBruto}">
@@ -1540,52 +1568,42 @@
                                 <label>Swap (U$)</label>
                                 <input type="number" step="0.01" id="modal-swap" placeholder="0.00" value="${swap}">
                             </div>
-                        </div>
-
-                        <div class="modal-row-3">
-                            <div class="modal-field">
-                                <label>Fechado com</label>
-                                <select id="modal-fechadoCom">
-                                    <option value="">-- Selecione --</option>
-                                    <option value="Lucro" ${isEdicao && tradeParaEditar.fechadoCom === 'Lucro' ? 'selected' : ''}>Lucro</option>
-                                    <option value="Prejuizo" ${isEdicao && tradeParaEditar.fechadoCom === 'Prejuizo' ? 'selected' : ''}>Prejuízo</option>
-                                </select>
-                            </div>
                             <div class="modal-field">
                                 <label>Data/Hora Fechamento</label>
                                 <input type="datetime-local" id="modal-dataFechamento" value="${isEdicao ? tradeParaEditar.dataFechamento || '' : ''}">
                             </div>
-                        </div>
-
-                        <!-- Área de imagem de fechamento -->
-                        <div class="modal-field">
-                            <label>📸 Imagem Fechamento</label>
-                            <div class="modal-image-area">
-                                <input type="text" id="modal-imgFechamentoNome" readonly placeholder="Cole a imagem (Ctrl+V)" style="flex: 1; background: transparent; border: none;" value="${isEdicao && tradeParaEditar.imgFechamentoNome ? tradeParaEditar.imgFechamentoNome : ''}">
-                                <img class="modal-image-preview" id="modal-previewFechamento" src="${isEdicao && tradeParaEditar.imgFechamentoBase64 ? tradeParaEditar.imgFechamentoBase64 : 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\' viewBox=\'0 0 24 24\' fill=\'%23ef4444\'%3E%3Crect width=\'24\' height=\'24\' fill=\'%232a313e\'/%3E%3Ctext x=\'4\' y=\'17\' fill=\'%23fff\' font-size=\'10\'%3E📸%3C/text%3E%3C/svg%3E'}" alt="preview">
-                                <button class="clear-image-btn" id="modal-limparImgFechamento" type="button">🗑️</button>
-                                <button class="zoom-image-btn" id="modal-zoomImgFechamento" type="button">🔍</button>
+                            <div class="modal-field">
+                                <label>Sent. Fechamento</label>
+                                <select id="modal-sentimentoFechamento">
+                                    <option value="">-- Selecione --</option>
+                                    <option value="Realizado" ${isEdicao && tradeParaEditar.sentimentoFechamento === 'Realizado' ? 'selected' : ''}>Realizado</option>
+                                    <option value="Alívio" ${isEdicao && tradeParaEditar.sentimentoFechamento === 'Alívio' ? 'selected' : ''}>Alívio</option>
+                                    <option value="Frustração" ${isEdicao && tradeParaEditar.sentimentoFechamento === 'Frustração' ? 'selected' : ''}>Frustração</option>
+                                    <option value="Orgulho" ${isEdicao && tradeParaEditar.sentimentoFechamento === 'Orgulho' ? 'selected' : ''}>Orgulho</option>
+                                    <option value="Arrependimento" ${isEdicao && tradeParaEditar.sentimentoFechamento === 'Arrependimento' ? 'selected' : ''}>Arrependimento</option>
+                                    <option value="Neutro" ${isEdicao && tradeParaEditar.sentimentoFechamento === 'Neutro' ? 'selected' : ''}>Neutro</option>
+                                </select>
                             </div>
                         </div>
 
-                        <div class="modal-field">
-                            <label>Observações Fechamento</label>
-                            <textarea id="modal-obsFechamento" rows="2">${isEdicao ? tradeParaEditar.obsFechamento || '' : ''}</textarea>
+                        <!-- Linha 5: Imagem Fechamento e Observações Fechamento -->
+                        <div class="modal-row">
+                            <div class="modal-field">
+                                <label>📸 Imagem Fechamento</label>
+                                <div class="modal-image-area">
+                                    <input type="text" id="modal-imgFechamentoNome" readonly placeholder="Cole a imagem (Ctrl+V)" style="flex: 1; background: transparent; border: none;" value="${isEdicao && tradeParaEditar.imgFechamentoNome ? tradeParaEditar.imgFechamentoNome : ''}">
+                                    <img class="modal-image-preview" id="modal-previewFechamento" src="${isEdicao && tradeParaEditar.imgFechamentoBase64 ? tradeParaEditar.imgFechamentoBase64 : 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\' viewBox=\'0 0 24 24\' fill=\'%23ef4444\'%3E%3Crect width=\'24\' height=\'24\' fill=\'%232a313e\'/%3E%3Ctext x=\'4\' y=\'17\' fill=\'%23fff\' font-size=\'10\'%3E📸%3C/text%3E%3C/svg%3E'}" alt="preview">
+                                    <button class="clear-image-btn" id="modal-limparImgFechamento" type="button">🗑️</button>
+                                    <button class="zoom-image-btn" id="modal-zoomImgFechamento" type="button">🔍</button>
+                                </div>
+                            </div>
+                            <div class="modal-field">
+                                <label>Observações Fechamento</label>
+                                <textarea id="modal-obsFechamento" rows="2">${isEdicao ? tradeParaEditar.obsFechamento || '' : ''}</textarea>
+                            </div>
                         </div>
 
-                        <div class="modal-field">
-                            <label>😊 Sentimento no fechamento</label>
-                            <select id="modal-sentimentoFechamento">
-                                <option value="">-- Selecione --</option>
-                                <option value="Realizado" ${isEdicao && tradeParaEditar.sentimentoFechamento === 'Realizado' ? 'selected' : ''}>Realizado</option>
-                                <option value="Alívio" ${isEdicao && tradeParaEditar.sentimentoFechamento === 'Alívio' ? 'selected' : ''}>Alívio</option>
-                                <option value="Frustração" ${isEdicao && tradeParaEditar.sentimentoFechamento === 'Frustração' ? 'selected' : ''}>Frustração</option>
-                                <option value="Orgulho" ${isEdicao && tradeParaEditar.sentimentoFechamento === 'Orgulho' ? 'selected' : ''}>Orgulho</option>
-                                <option value="Arrependimento" ${isEdicao && tradeParaEditar.sentimentoFechamento === 'Arrependimento' ? 'selected' : ''}>Arrependimento</option>
-                                <option value="Neutro" ${isEdicao && tradeParaEditar.sentimentoFechamento === 'Neutro' ? 'selected' : ''}>Neutro</option>
-                            </select>
-                        </div>
-
+                        <!-- Botões de ação -->
                         <div class="modal-actions">
                             <button class="modal-btn-outline" id="modal-cancelar">Cancelar</button>
                             <button class="modal-btn-print" id="modal-imprimir">🖨️ Imprimir</button>
