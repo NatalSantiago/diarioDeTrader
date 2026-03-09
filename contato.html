@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - SantiagoTECH</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #FF6B00;
+            --secondary: #003366;
+            --dark: #1a1a1a;
+            --light: #f8f9fa;
+            --success: #28a745;
+            --gray: #6c757d;
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --card-bg: #ffffff;
+            --section-bg: #f8f9fa;
+            --header-bg: #ffffff;
+            --footer-bg: #1a1a1a;
+            --hero-bg: linear-gradient(135deg, #003366 0%, #001a33 100%);
+        }
+        [data-theme="dark"] {
+            --primary: #FF6B00;
+            --secondary: #4d94ff;
+            --dark: #f8f9fa;
+            --light: #1a1a1a;
+            --success: #28a745;
+            --gray: #adb5bd;
+            --bg-color: #121212;
+            --text-color: #f8f9fa;
+            --card-bg: #1e1e1e;
+            --section-bg: #2a2a2a;
+            --header-bg: #1e1e1e;
+            --footer-bg: #0d0d0d;
+            --hero-bg: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+            padding-top: 80px;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            background-color: var(--header-bg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s;
+            height: 80px;
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            height: 100%;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        .logo span {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--gray);
+            margin-left: 5px;
+        }
+        nav {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+        nav ul li {
+            margin-left: 25px;
+            position: relative;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+        .dropdown {
+            position: relative;
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--card-bg);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            min-width: 320px;
+            display: none;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+        .dropdown::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 12px;
+            background: transparent;
+        }
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        .dropdown-menu::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid var(--card-bg);
+        }
+        .dropdown-menu li {
+            margin: 0;
+            width: 100%;
+        }
+        .dropdown-menu li a {
+            display: block;
+            padding: 8px 25px;
+            color: var(--text-color);
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+        .dropdown-menu li a:hover {
+            background-color: rgba(255,107,0,0.1);
+            color: var(--primary);
+        }
+        .menu-category {
+            font-weight: 700;
+            color: var(--secondary);
+            padding: 10px 25px 5px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            margin-bottom: 5px;
+        }
+        .menu-divider {
+            height: 1px;
+            background-color: rgba(0,0,0,0.1);
+            margin: 8px 0;
+        }
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #e55a00;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3);
+        }
+        .lang-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .lang-btn img {
+            width: 24px;
+            height: 18px;
+            border-radius: 2px;
+            object-fit: cover;
+        }
+        .lang-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--card-bg);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            min-width: 120px;
+            display: none;
+            z-index: 1000;
+            margin-top: 10px;
+        }
+        .lang-btn:hover .lang-dropdown {
+            display: block;
+        }
+        .lang-dropdown::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 10px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid var(--card-bg);
+        }
+        .lang-dropdown a {
+            display: block;
+            padding: 10px 15px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .lang-dropdown a:hover {
+            background-color: rgba(255,107,0,0.1);
+            color: var(--primary);
+        }
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-left: 20px;
+            transition: color 0.3s;
+        }
+        .theme-toggle:hover {
+            color: var(--primary);
+        }
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .page-title {
+            background: var(--hero-bg);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-title::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></svg>');
+            background-size: 20px 20px;
+            opacity: 0.3;
+        }
+        .page-title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+            animation: fadeInDown 0.8s ease;
+        }
+        .page-title p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 0.8s ease;
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .contact-section {
+            padding: 80px 0;
+            background-color: var(--section-bg);
+        }
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+        .contact-form {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .contact-form:hover {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        .contact-form h2 {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.2);
+            transform: scale(1.02);
+        }
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .phone-input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .country-selector {
+            position: relative;
+            margin-right: 10px;
+            z-index: 10;
+        }
+        .selected-country {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: border-color 0.3s;
+            min-width: 120px;
+        }
+        .selected-country:hover {
+            border-color: var(--primary);
+        }
+        .selected-country .flag {
+            width: 24px;
+            height: 18px;
+            margin-right: 8px;
+            object-fit: cover;
+            border-radius: 2px;
+            display: block;
+        }
+        .selected-country .code {
+            font-weight: 500;
+            margin-right: 8px;
+        }
+        .selected-country i {
+            margin-left: auto;
+            font-size: 12px;
+        }
+        .country-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--card-bg);
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            margin-top: 5px;
+            width: 350px;
+        }
+        .country-dropdown.active {
+            display: block;
+        }
+        .country-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .country-item:hover {
+            background-color: rgba(255, 107, 0, 0.1);
+        }
+        .country-item .flag {
+            width: 24px;
+            height: 18px;
+            margin-right: 10px;
+            object-fit: cover;
+            border-radius: 2px;
+            display: block;
+        }
+        .country-item .country-name {
+            flex: 1;
+            color: var(--text-color);
+        }
+        .country-item .country-code {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        .phone-number {
+            flex: 1;
+        }
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .info-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        .info-card h3 {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .info-card h3 i {
+            color: var(--primary);
+            margin-right: 10px;
+        }
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            transition: transform 0.3s;
+        }
+        .info-item:hover {
+            transform: translateX(5px);
+        }
+        .info-item i {
+            color: var(--primary);
+            margin-right: 15px;
+            margin-top: 5px;
+            font-size: 1.1rem;
+        }
+        .info-item p {
+            margin: 0;
+            color: var(--text-color);
+        }
+        .info-item p span {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .map-section {
+            padding: 0 0 80px;
+        }
+        .map-container {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            height: 400px;
+            transition: box-shadow 0.3s;
+        }
+        .map-container:hover {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        footer {
+            background-color: var(--footer-bg);
+            color: white;
+            padding: 70px 0 20px;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .footer-column h3::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        .footer-column p, .footer-column ul li {
+            opacity: 0.8;
+        }
+        .footer-column ul {
+            list-style: none;
+        }
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        .footer-column ul li a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        .footer-column ul li a:hover {
+            opacity: 1;
+        }
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: scale(1.1);
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 992px) {
+            .contact-container { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            body { padding-top: 120px; }
+            .header-container {
+                flex-direction: column;
+                padding: 10px;
+            }
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                top: 15px;
+                right: 15px;
+            }
+            nav {
+                width: 100%;
+                margin-top: 15px;
+                display: none;
+                justify-content: center;
+            }
+            nav.active {
+                display: flex;
+            }
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav ul li {
+                margin: 10px 0;
+                width: 100%;
+                text-align: center;
+            }
+            .dropdown-menu {
+                position: static;
+                display: none;
+                background-color: transparent;
+                box-shadow: none;
+                border: none;
+                padding: 0;
+                margin-top: 5px;
+            }
+            .dropdown-menu::before {
+                display: none;
+            }
+            .dropdown.active .dropdown-menu {
+                display: block;
+            }
+            .lang-btn {
+                margin: 10px 0;
+            }
+            .page-title h1 { font-size: 2rem; }
+            .contact-form { padding: 25px; }
+            .info-card { padding: 20px; }
+            .phone-input-container { flex-direction: column; align-items: stretch; }
+            .country-selector { margin-right: 0; margin-bottom: 10px; }
+            .selected-country { justify-content: center; }
+            .country-dropdown { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="Santiago-TECH.png" alt="SantiagoTECH">
+                SantiagoTECH <span data-i18n="solutions">Soluções em Tecnologia</span>
+            </div>
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="nav-menu">
+                <ul>
+                    <li><a href="index.html" data-i18n="home">Início</a></li>
+                    <li class="dropdown">
+                        <a href="#" id="projetos-link" data-i18n="projects">Projetos <i class="fas fa-chevron-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li class="menu-category" data-i18n="web_systems">Sistemas Web</li>
+                            <li><a href="#" data-i18n="saude_mais">SAUDEMAIS – Gestão Hospitalar</a></li>
+                            <li><a href="#" data-i18n="hospeda_mais">HOSPEDAMAIS – Gestão Hoteleira</a></li>
+                            <li><a href="#" data-i18n="automoto">AutoMotoXweb – Oficina e Auto Peças</a></li>
+                            <li class="menu-divider"></li>
+                            <li class="menu-category" data-i18n="desktop_systems">Sistemas Desktop</li>
+                            <li><a href="#" data-i18n="sica">SICA – Gestão Escolar</a></li>
+                            <li><a href="#" data-i18n="fopag">FOPAG – Folha de Pagamento</a></li>
+                            <li class="menu-divider"></li>
+                            <li class="menu-category" data-i18n="experts">Expert's MT5</li>
+                            <li><a href="#" data-i18n="mytrader">MyTraderTECH – Boleta inteligente</a></li>
+                            <li class="menu-divider"></li>
+                            <li class="menu-category" data-i18n="indicators">Indicadores MT5</li>
+                            <li><a href="#" data-i18n="chartsync">ChartSyncTECH – Sincronia de gráficos</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="index.html#solucoes" data-i18n="solutions_menu">Soluções</a></li>
+                    <li><a href="contato.html" data-i18n="contact">Contato</a></li>
+                    <li><a href="solicitacao.html" class="btn" data-i18n="quote">Solicitar Orçamento</a></li>
+                </ul>
+            </nav>
+            <div class="lang-btn">
+                <img src="https://flagcdn.com/w40/br.png" alt="Português" id="current-flag">
+                <div class="lang-dropdown">
+                    <a href="#" data-lang="pt"><img src="https://flagcdn.com/w40/br.png" alt="Português" style="width:20px; margin-right:8px;">Português</a>
+                    <a href="#" data-lang="en"><img src="https://flagcdn.com/w40/us.png" alt="English" style="width:20px; margin-right:8px;">English</a>
+                    <a href="#" data-lang="es"><img src="https://flagcdn.com/w40/es.png" alt="Español" style="width:20px; margin-right:8px;">Español</a>
+                </div>
+            </div>
+            <button id="theme-toggle" class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <section class="page-title">
+        <div class="container">
+            <h1 data-i18n="contact_title">Entre em Contato</h1>
+            <p data-i18n="contact_subtitle">Estamos à disposição para tirar suas dúvidas e ajudar no desenvolvimento do seu projeto</p>
+        </div>
+    </section>
+
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-container">
+                <div class="contact-form">
+                    <h2 data-i18n="contact_form_title">Envie-nos uma mensagem</h2>
+                    <form id="contact-form" name="contato" method="POST" data-netlify="true" enctype="multipart/form-data">
+                        <input type="hidden" name="form-name" value="contato">
+                        <div class="form-group">
+                            <label for="name" data-i18n="form_name">Nome Completo</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" data-i18n="form_email">E-mail</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" data-i18n="form_phone">Telefone/WhatsApp</label>
+                            <div class="phone-input-container">
+                                <div class="country-selector">
+                                    <div class="selected-country" id="selected-country">
+                                        <img src="https://flagcdn.com/w40/br.png" alt="Bandeira do Brasil" class="flag">
+                                        <span class="code">+55</span>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="country-dropdown" id="country-dropdown"></div>
+                                </div>
+                                <input type="tel" id="phone" name="phone" class="form-control phone-number" placeholder="(XX) 9 XXXX-XXXX" required>
+                            </div>
+                            <input type="hidden" id="country-code" name="country-code" value="+55">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject" data-i18n="form_subject">Assunto</label>
+                            <input type="text" id="subject" name="subject" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message" data-i18n="form_message">Mensagem</label>
+                            <textarea id="message" name="message" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="btn" id="submit-btn">
+                            <span data-i18n="form_send">Enviar Mensagem</span>
+                            <span class="spinner" id="spinner"></span>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="contact-info">
+                    <div class="info-card">
+                        <h3><i class="fas fa-map-marker-alt"></i> <span data-i18n="info_location">Localização</span></h3>
+                        <div class="info-item">
+                            <i class="fas fa-city"></i>
+                            <p><span data-i18n="info_city">Cidade</span> <span data-i18n="location">Imperatriz - Maranhão</span></p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <h3><i class="fas fa-phone-alt"></i> <span data-i18n="info_contact">Contato</span></h3>
+                        <div class="info-item">
+                            <i class="fab fa-whatsapp"></i>
+                            <p><span>WhatsApp</span> +55 (99) 9 8444-7141</p>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-envelope"></i>
+                            <p><span>E-mail</span> natal.santiago.tech@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <h3><i class="fas fa-clock"></i> <span data-i18n="info_hours">Horário de Funcionamento</span></h3>
+                        <div class="info-item">
+                            <i class="far fa-calendar"></i>
+                            <p><span data-i18n="mon_fri">Segunda a Sexta</span> 08:00 - 18:00</p>
+                        </div>
+                        <div class="info-item">
+                            <i class="far fa-calendar"></i>
+                            <p><span data-i18n="sat">Sábado</span> 08:00 - 12:00</p>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-info-circle"></i>
+                            <p><span data-i18n="online">Atendimento Online</span> 24/7</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="map-section">
+        <div class="container">
+            <div class="map-container">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.4028974285183!2d-44.85541808524435!3d-5.519899796088717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x92e38d5c5e5e3e3f%3A0x4e5e5e5e5e5e5e5e!2sAv.%20Castelo%20Branco%2C%20199%20-%20Vila%20Vit%C3%B3ria%2C%20Imperatriz%20-%20MA%2C%2065918-003!5e0!3m2!1spt-BR!2sbr!4v1620000000000!5m2!1spt-BR!2sbr" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3 data-i18n="footer_about">SantiagoTECH</h3>
+                    <p data-i18n="footer_desc">Desenvolvimento de software sob medida, sistemas prontos e personalizados para web, desktop e MetaTrader 5.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3 data-i18n="footer_links">Links Rápidos</h3>
+                    <ul>
+                        <li><a href="index.html" data-i18n="home">Início</a></li>
+                        <li><a href="index.html#solucoes" data-i18n="solutions_menu">Soluções</a></li>
+                        <li><a href="contato.html" data-i18n="contact">Contato</a></li>
+                        <li><a href="solicitacao.html" data-i18n="quote">Solicitar Orçamento</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3 data-i18n="footer_contact">Contato</h3>
+                    <ul>
+                        <li><i class="fab fa-whatsapp"></i> +55 (99) 9 8444-7141</li>
+                        <li><i class="fas fa-envelope"></i> natal.santiago.tech@gmail.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> <span data-i18n="location">Imperatriz - Maranhão</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 SantiagoTECH. <span data-i18n="rights">Todos os direitos reservados.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ==================== LISTA DE PAÍSES ====================
+        const countries = [
+            { name: 'Brasil', code: '+55', iso: 'br' },
+            { name: 'Argentina', code: '+54', iso: 'ar' },
+            { name: 'Chile', code: '+56', iso: 'cl' },
+            { name: 'Equador', code: '+593', iso: 'ec' },
+            { name: 'Venezuela', code: '+58', iso: 've' },
+            { name: 'Paraguai', code: '+595', iso: 'py' },
+            { name: 'Uruguai', code: '+598', iso: 'uy' },
+            { name: 'Estados Unidos', code: '+1', iso: 'us' },
+            { name: 'Reino Unido', code: '+44', iso: 'gb' },
+            { name: 'Portugal', code: '+351', iso: 'pt' },
+            { name: 'Espanha', code: '+34', iso: 'es' },
+            { name: 'França', code: '+33', iso: 'fr' },
+            { name: 'Alemanha', code: '+49', iso: 'de' },
+            { name: 'Itália', code: '+39', iso: 'it' },
+            { name: 'Japão', code: '+81', iso: 'jp' },
+            { name: 'China', code: '+86', iso: 'cn' },
+            { name: 'Canadá', code: '+1', iso: 'ca' },
+            { name: 'Austrália', code: '+61', iso: 'au' },
+            { name: 'México', code: '+52', iso: 'mx' },
+            { name: 'Índia', code: '+91', iso: 'in' },
+            { name: 'Rússia', code: '+7', iso: 'ru' },
+            { name: 'Coreia do Sul', code: '+82', iso: 'kr' },
+            { name: 'Países Baixos', code: '+31', iso: 'nl' },
+            { name: 'Suíça', code: '+41', iso: 'ch' },
+            { name: 'Bélgica', code: '+32', iso: 'be' }
+        ];
+
+        let selectedCountry = countries[0];
+
+        function createFlagElement(country) {
+            const flagImg = document.createElement('img');
+            flagImg.className = 'flag';
+            flagImg.src = `https://flagcdn.com/w40/${country.iso}.png`;
+            flagImg.alt = `Bandeira de ${country.name}`;
+            flagImg.onerror = function() {
+                this.src = `https://flagpedia.net/data/flags/w40/${country.iso}.png`;
+                this.onerror = function() {
+                    this.src = `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAxOCI+PHJlY3QgZmlsbD0iI2RkZCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjE4Ii8+PHRleHQgeD0iMTIiIHk9IjEyIiBmb250LXNpemU9IjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5OTkiPjwvdGV4dD48L3N2Zz4=`;
+                };
+            };
+            return flagImg;
+        }
+
+        const countryDropdown = document.getElementById('country-dropdown');
+        countries.forEach(country => {
+            const item = document.createElement('div');
+            item.className = 'country-item';
+            const flagImg = createFlagElement(country);
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'country-name';
+            nameSpan.textContent = country.name;
+            const codeSpan = document.createElement('span');
+            codeSpan.className = 'country-code';
+            codeSpan.textContent = country.code;
+            item.appendChild(flagImg);
+            item.appendChild(nameSpan);
+            item.appendChild(codeSpan);
+            item.addEventListener('click', () => {
+                selectedCountry = country;
+                updateSelectedCountry();
+                updateCountryCode();
+                countryDropdown.classList.remove('active');
+                updatePhonePlaceholder();
+            });
+            countryDropdown.appendChild(item);
+        });
+
+        function updateSelectedCountry() {
+            const selectedCountryEl = document.getElementById('selected-country');
+            selectedCountryEl.innerHTML = '';
+            const flagImg = createFlagElement(selectedCountry);
+            const codeSpan = document.createElement('span');
+            codeSpan.className = 'code';
+            codeSpan.textContent = selectedCountry.code;
+            const icon = document.createElement('i');
+            icon.className = 'fas fa-chevron-down';
+            selectedCountryEl.appendChild(flagImg);
+            selectedCountryEl.appendChild(codeSpan);
+            selectedCountryEl.appendChild(icon);
+        }
+
+        function updateCountryCode() {
+            document.getElementById('country-code').value = selectedCountry.code;
+        }
+
+        function updatePhonePlaceholder() {
+            const phoneInput = document.getElementById('phone');
+            phoneInput.placeholder = selectedCountry.code === '+55' ? '(XX) 9 XXXX-XXXX' : 'Digite o número de telefone';
+        }
+
+        document.getElementById('selected-country').addEventListener('click', () => {
+            countryDropdown.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.country-selector')) {
+                countryDropdown.classList.remove('active');
+            }
+        });
+
+        const phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', (e) => {
+            if (selectedCountry.code === '+55') {
+                let value = e.target.value.replace(/\D/g, '');
+                let formatted = '';
+                if (value.length > 0) formatted = '(' + value.substring(0,2);
+                if (value.length >= 3) formatted += ') ' + value.substring(2,3);
+                if (value.length >= 4) formatted += ' ' + value.substring(3,7);
+                if (value.length >= 8) formatted += '-' + value.substring(7,11);
+                e.target.value = formatted;
+            }
+        });
+
+        // ==================== TRADUÇÃO ====================
+        const translations = {
+            pt: {
+                solutions: "Soluções em Tecnologia",
+                home: "Início",
+                projects: "Projetos",
+                web_systems: "Sistemas Web",
+                saude_mais: "SAUDEMAIS – Gestão Hospitalar",
+                hospeda_mais: "HOSPEDAMAIS – Gestão Hoteleira",
+                automoto: "AutoMotoXweb – Oficina e Auto Peças",
+                desktop_systems: "Sistemas Desktop",
+                sica: "SICA – Gestão Escolar",
+                fopag: "FOPAG – Folha de Pagamento",
+                experts: "Expert's MT5",
+                mytrader: "MyTraderTECH – Boleta inteligente",
+                indicators: "Indicadores MT5",
+                chartsync: "ChartSyncTECH – Sincronia de gráficos",
+                solutions_menu: "Soluções",
+                contact: "Contato",
+                quote: "Solicitar Orçamento",
+                contact_title: "Entre em Contato",
+                contact_subtitle: "Estamos à disposição para tirar suas dúvidas e ajudar no desenvolvimento do seu projeto",
+                contact_form_title: "Envie-nos uma mensagem",
+                form_name: "Nome Completo",
+                form_email: "E-mail",
+                form_phone: "Telefone/WhatsApp",
+                form_subject: "Assunto",
+                form_message: "Mensagem",
+                form_send: "Enviar Mensagem",
+                info_location: "Localização",
+                info_city: "Cidade",
+                location: "Imperatriz - Maranhão",
+                info_contact: "Contato",
+                info_hours: "Horário de Funcionamento",
+                mon_fri: "Segunda a Sexta",
+                sat: "Sábado",
+                online: "Atendimento Online",
+                footer_about: "SantiagoTECH",
+                footer_desc: "Desenvolvimento de software sob medida, sistemas prontos e personalizados para web, desktop e MetaTrader 5.",
+                footer_links: "Links Rápidos",
+                footer_contact: "Contato",
+                rights: "Todos os direitos reservados."
+            },
+            en: {
+                solutions: "Technology Solutions",
+                home: "Home",
+                projects: "Projects",
+                web_systems: "Web Systems",
+                saude_mais: "SAUDEMAIS – Hospital Management",
+                hospeda_mais: "HOSPEDAMAIS – Hotel Management",
+                automoto: "AutoMotoXweb – Workshop & Auto Parts",
+                desktop_systems: "Desktop Systems",
+                sica: "SICA – School Management",
+                fopag: "FOPAG – Payroll Management",
+                experts: "MT5 Experts",
+                mytrader: "MyTraderTECH – Smart Order",
+                indicators: "MT5 Indicators",
+                chartsync: "ChartSyncTECH – Chart Sync",
+                solutions_menu: "Solutions",
+                contact: "Contact",
+                quote: "Request Quote",
+                contact_title: "Contact Us",
+                contact_subtitle: "We are available to answer your questions and help with your project development",
+                contact_form_title: "Send us a message",
+                form_name: "Full Name",
+                form_email: "Email",
+                form_phone: "Phone/WhatsApp",
+                form_subject: "Subject",
+                form_message: "Message",
+                form_send: "Send Message",
+                info_location: "Location",
+                info_city: "City",
+                location: "Imperatriz - Maranhão, Brazil",
+                info_contact: "Contact",
+                info_hours: "Business Hours",
+                mon_fri: "Monday to Friday",
+                sat: "Saturday",
+                online: "Online Support",
+                footer_about: "SantiagoTECH",
+                footer_desc: "Custom software development, ready-made and customized systems for web, desktop and MetaTrader 5.",
+                footer_links: "Quick Links",
+                footer_contact: "Contact",
+                rights: "All rights reserved."
+            },
+            es: {
+                solutions: "Soluciones en Tecnología",
+                home: "Inicio",
+                projects: "Proyectos",
+                web_systems: "Sistemas Web",
+                saude_mais: "SAUDEMAIS – Gestión Hospitalaria",
+                hospeda_mais: "HOSPEDAMAIS – Gestión Hotelera",
+                automoto: "AutoMotoXweb – Taller y Autopartes",
+                desktop_systems: "Sistemas Desktop",
+                sica: "SICA – Gestión Escolar",
+                fopag: "FOPAG – Gestión de Nómina",
+                experts: "Expertos MT5",
+                mytrader: "MyTraderTECH – Orden inteligente",
+                indicators: "Indicadores MT5",
+                chartsync: "ChartSyncTECH – Sincronía de gráficos",
+                solutions_menu: "Soluciones",
+                contact: "Contacto",
+                quote: "Solicitar Presupuesto",
+                contact_title: "Contacto",
+                contact_subtitle: "Estamos a disposición para resolver sus dudas y ayudarle en el desarrollo de su proyecto",
+                contact_form_title: "Envíenos un mensaje",
+                form_name: "Nombre Completo",
+                form_email: "Correo electrónico",
+                form_phone: "Teléfono/WhatsApp",
+                form_subject: "Asunto",
+                form_message: "Mensaje",
+                form_send: "Enviar Mensaje",
+                info_location: "Ubicación",
+                info_city: "Ciudad",
+                location: "Imperatriz - Maranhão, Brasil",
+                info_contact: "Contacto",
+                info_hours: "Horario de Atención",
+                mon_fri: "Lunes a Viernes",
+                sat: "Sábado",
+                online: "Atención Online",
+                footer_about: "SantiagoTECH",
+                footer_desc: "Desarrollo de software a medida, sistemas listos y personalizados para web, escritorio y MetaTrader 5.",
+                footer_links: "Enlaces Rápidos",
+                footer_contact: "Contacto",
+                rights: "Todos los derechos reservados."
+            }
+        };
+
+        let currentLang = localStorage.getItem('lang') || 'pt';
+        const currentFlag = document.getElementById('current-flag');
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            if (lang === 'pt') currentFlag.src = 'https://flagcdn.com/w40/br.png';
+            else if (lang === 'en') currentFlag.src = 'https://flagcdn.com/w40/us.png';
+            else if (lang === 'es') currentFlag.src = 'https://flagcdn.com/w40/es.png';
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        document.querySelectorAll('.lang-dropdown a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const lang = link.getAttribute('data-lang');
+                setLanguage(lang);
+            });
+        });
+
+        setLanguage(currentLang);
+
+        // ==================== THEME TOGGLE ====================
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const themeIcon = themeToggle.querySelector('i');
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+        themeToggle.addEventListener('click', () => {
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // ==================== MOBILE MENU ====================
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navMenu.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
+
+        const dropdownLinks = document.querySelectorAll('.dropdown > a');
+        dropdownLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    const parent = link.parentElement;
+                    parent.classList.toggle('active');
+                }
+            });
+        });
+
+        // ==================== FORM SUBMISSION ====================
+        const contactForm = document.getElementById('contact-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const spinner = document.getElementById('spinner');
+
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            spinner.style.display = 'inline-block';
+            submitBtn.disabled = true;
+
+            const phoneField = document.getElementById('phone');
+            const countryCodeField = document.getElementById('country-code');
+            const fullPhone = countryCodeField.value + ' ' + phoneField.value;
+            phoneField.value = fullPhone;
+
+            const formData = new FormData(contactForm);
+
+            fetch('/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                spinner.style.display = 'none';
+                submitBtn.disabled = false;
+                if (response.ok) {
+                    Swal.fire({
+                        title: translations[currentLang].form_send === 'Enviar Mensagem' ? 'Mensagem Enviada!' : (currentLang === 'en' ? 'Message Sent!' : '¡Mensaje Enviado!'),
+                        text: currentLang === 'pt' ? 'Sua mensagem foi enviada com sucesso. Entraremos em contato em breve.' :
+                              (currentLang === 'en' ? 'Your message has been sent successfully. We will contact you soon.' :
+                              'Su mensaje ha sido enviado con éxito. Nos comunicaremos con usted pronto.'),
+                        icon: 'success',
+                        confirmButtonColor: '#FF6B00'
+                    }).then(() => {
+                        window.location.href = 'index.html';
+                    });
+                    contactForm.reset();
+                    phoneField.value = '';
+                } else {
+                    phoneField.value = phoneField.value.replace(countryCodeField.value + ' ', '');
+                    Swal.fire({
+                        title: 'Erro!',
+                        text: currentLang === 'pt' ? 'Ocorreu um erro ao enviar sua mensagem. Tente novamente mais tarde.' :
+                              (currentLang === 'en' ? 'An error occurred while sending your message. Please try again later.' :
+                              'Ocurrió un error al enviar su mensaje. Por favor, intente de nuevo más tarde.'),
+                        icon: 'error',
+                        confirmButtonColor: '#FF6B00'
+                    });
+                }
+            })
+            .catch(error => {
+                spinner.style.display = 'none';
+                submitBtn.disabled = false;
+                phoneField.value = phoneField.value.replace(countryCodeField.value + ' ', '');
+                Swal.fire({
+                    title: 'Erro!',
+                    text: currentLang === 'pt' ? 'Ocorreu um erro ao enviar sua mensagem. Tente novamente mais tarde.' :
+                          (currentLang === 'en' ? 'An error occurred while sending your message. Please try again later.' :
+                          'Ocurrió un error al enviar su mensaje. Por favor, intente de nuevo más tarde.'),
+                    icon: 'error',
+                    confirmButtonColor: '#FF6B00'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

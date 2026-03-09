@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SantiagoTECH - Soluções em Tecnologia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ========== VARIÁVEIS ========== */
+        :root {
+            --primary: #FF6B00;
+            --primary-glow: rgba(255, 107, 0, 0.4);
+            --secondary: #003366;
+            --secondary-light: #4d94ff;
+            --dark: #0a0a0a;
+            --light: #f0f4fa;
+            --success: #28a745;
+            --gray: #a0a0a0;
+            --bg-color: #ffffff;
+            --text-color: #1e1e2a;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --card-border: rgba(255, 107, 0, 0.2);
+            --section-bg: #f8fafd;
+            --header-bg: rgba(255, 255, 255, 0.8);
+            --footer-bg: #0f172a;
+            --hero-gradient: linear-gradient(135deg, #0b1b33 0%, #1a2f4f 100%);
+            --glass-blur: blur(12px);
+            --shadow-sm: 0 8px 20px rgba(0,0,0,0.06);
+            --shadow-lg: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        [data-theme="dark"] {
+            --primary: #FF6B00;
+            --primary-glow: rgba(255, 107, 0, 0.3);
+            --secondary: #8ab4f8;
+            --secondary-light: #a0c4ff;
+            --dark: #f0f0f0;
+            --light: #1e1e2a;
+            --success: #34d399;
+            --gray: #9ca3af;
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 107, 0, 0.3);
+            --section-bg: #1a2639;
+            --header-bg: rgba(15, 23, 42, 0.9);
+            --footer-bg: #020617;
+            --hero-gradient: linear-gradient(135deg, #0a0f1e 0%, #1a1f33 100%);
+        }
+
+        /* ========== RESET ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            overflow-x: hidden;
+            transition: background-color 0.4s, color 0.3s;
+            padding-top: 80px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* ========== HEADER (GLASS) ========== */
+        header {
+            background: var(--header-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(255,107,0,0.15);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: background 0.3s;
+            height: 80px;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            height: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--secondary);
+            letter-spacing: -0.5px;
+        }
+
+        .logo img {
+            height: 50px;
+            margin-right: 12px;
+            filter: drop-shadow(0 4px 6px var(--primary-glow));
+        }
+
+        .logo span {
+            font-size: 15px;
+            font-weight: 400;
+            color: var(--gray);
+            margin-left: 8px;
+            background: rgba(255,107,0,0.1);
+            padding: 2px 10px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,107,0,0.2);
+        }
+
+        nav {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+            gap: 15px;
+        }
+
+        nav ul li {
+            position: relative;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 40px;
+            transition: all 0.3s;
+            font-size: 1rem;
+            background: transparent;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+            background: rgba(255,107,0,0.08);
+        }
+
+        /* ===== DROPDOWN (MODERNO) ===== */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
+            min-width: 340px;
+            display: none;
+            z-index: 1000;
+            padding: 15px 0;
+            margin-top: 12px;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .dropdown::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background: transparent;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 25px;
+            width: 16px;
+            height: 16px;
+            background: var(--card-bg);
+            border-top: 1px solid var(--card-border);
+            border-left: 1px solid var(--card-border);
+            transform: rotate(45deg);
+            backdrop-filter: var(--glass-blur);
+        }
+
+        .dropdown-menu li {
+            margin: 0;
+        }
+
+        .dropdown-menu li a {
+            display: block;
+            padding: 10px 25px;
+            color: var(--text-color);
+            font-size: 0.95rem;
+            white-space: nowrap;
+            border-radius: 0;
+            background: transparent;
+        }
+
+        .dropdown-menu li a:hover {
+            background: rgba(255,107,0,0.1);
+            color: var(--primary);
+        }
+
+        .menu-category {
+            font-weight: 700;
+            color: var(--secondary);
+            padding: 12px 25px 4px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+
+        .menu-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-glow), transparent);
+            margin: 8px 0;
+        }
+
+        /* ===== BOTÕES ===== */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(145deg, var(--primary), #e55a00);
+            color: white;
+            padding: 10px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 8px 16px rgba(255,107,0,0.3);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+            z-index: -1;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(255,107,0,0.5);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        /* ===== LANG & THEME ===== */
+        .lang-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .lang-btn img {
+            width: 28px;
+            height: 20px;
+            border-radius: 4px;
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .lang-btn:hover img {
+            transform: scale(1.1);
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            min-width: 140px;
+            display: none;
+            z-index: 1000;
+            margin-top: 12px;
+            padding: 8px 0;
+        }
+
+        .lang-btn:hover .lang-dropdown {
+            display: block;
+        }
+
+        .lang-dropdown::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 15px;
+            width: 12px;
+            height: 12px;
+            background: var(--card-bg);
+            border-top: 1px solid var(--card-border);
+            border-left: 1px solid var(--card-border);
+            transform: rotate(45deg);
+        }
+
+        .lang-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .lang-dropdown a:hover {
+            background: rgba(255,107,0,0.1);
+        }
+
+        .lang-dropdown img {
+            width: 22px;
+            height: 16px;
+            border-radius: 3px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-left: 15px;
+            transition: color 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(128,128,128,0.1);
+        }
+
+        .theme-toggle:hover {
+            color: var(--primary);
+            background: rgba(255,107,0,0.15);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.8rem;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        /* ========== HERO (MODERNO) ========== */
+        .hero {
+            background: var(--hero-gradient);
+            color: white;
+            padding: 100px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(255,107,0,0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 30%, rgba(77,148,255,0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: 60px 60px;
+            opacity: 0.3;
+            animation: moveParticles 40s linear infinite;
+        }
+
+        @keyframes moveParticles {
+            0% { transform: translate(0,0); }
+            100% { transform: translate(60px,60px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 3.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .hero-text h1 span {
+            color: var(--primary);
+            background: linear-gradient(145deg, #FF8A3C, #FF6B00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            max-width: 500px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            max-height: 450px;
+            border-radius: 20px;
+            box-shadow: 0 30px 40px -20px rgba(0,0,0,0.5);
+        }
+
+        /* ========== SEÇÕES GLOBAIS ========== */
+        .section-title {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-title h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* ========== FEATURES (GLASS CARDS) ========== */
+        .features {
+            padding: 120px 0;
+            background-color: var(--section-bg);
+            position: relative;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            padding: 35px 25px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(255,107,0,0.15), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: -1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .feature-card:hover::after {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(145deg, rgba(255,107,0,0.2), rgba(255,107,0,0.05));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,107,0,0.3);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .feature-icon i {
+            font-size: 38px;
+            color: var(--primary);
+            filter: drop-shadow(0 5px 10px var(--primary-glow));
+        }
+
+        .feature-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* ===== TECH BADGES ===== */
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 60px;
+            justify-content: center;
+        }
+
+        .tech-badge {
+            background: linear-gradient(145deg, var(--primary), #ff8533);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 20px rgba(255,107,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            transition: transform 0.3s;
+        }
+
+        .tech-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(255,107,0,0.5);
+        }
+
+        /* ========== TESTIMONIALS ========== */
+        .testimonials {
+            padding: 120px 0;
+            background-color: var(--bg-color);
+        }
+
+        .testimonials-container {
+            position: relative;
+            overflow: hidden;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .testimonials-wrapper {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .testimonials-slide {
+            min-width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            padding: 35px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .testimonial-content {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            font-style: italic;
+            color: var(--text-color);
+            position: relative;
+        }
+
+        .testimonial-content::before {
+            content: '“';
+            font-size: 5rem;
+            position: absolute;
+            left: -20px;
+            top: -30px;
+            color: var(--primary);
+            opacity: 0.2;
+            font-family: serif;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+        }
+
+        .testimonial-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+            gap: 25px;
+        }
+
+        .testimonial-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 16px rgba(255,107,0,0.3);
+        }
+
+        .testimonial-btn:hover {
+            background: #e55a00;
+            transform: scale(1.1);
+        }
+
+        .testimonial-indicators {
+            display: flex;
+            gap: 12px;
+        }
+
+        .indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255,107,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .indicator.active {
+            background: var(--primary);
+            transform: scale(1.3);
+        }
+
+        /* ========== BENEFITS ========== */
+        .benefits {
+            padding: 120px 0;
+            background-color: var(--section-bg);
+            position: relative;
+        }
+
+        .benefits-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 70px;
+            align-items: center;
+        }
+
+        .benefits-text h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 25px;
+        }
+
+        .benefits-list {
+            list-style: none;
+            margin: 40px 0;
+        }
+
+        .benefits-list li {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            border-radius: 60px;
+            border: 1px solid var(--card-border);
+            transition: transform 0.3s;
+        }
+
+        .benefits-list li:hover {
+            transform: translateX(10px);
+            border-color: var(--primary);
+        }
+
+        .benefits-list li i {
+            color: var(--success);
+            font-size: 1.5rem;
+        }
+
+        .benefits-image {
+            position: relative;
+        }
+
+        .benefits-image img {
+            width: 100%;
+            border-radius: 30px;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid rgba(255,107,0,0.3);
+            transition: transform 0.4s;
+        }
+
+        .benefits-image:hover img {
+            transform: perspective(1000px) rotateY(-5deg) scale(1.02);
+        }
+
+        /* ========== FOOTER (WAVES) ========== */
+        footer {
+            background-color: var(--footer-bg);
+            color: white;
+            padding: 0;
+            position: relative;
+        }
+
+        .footer-wave {
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            transform: rotate(180deg);
+        }
+
+        .footer-wave svg {
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 80px;
+        }
+
+        .footer-wave .shape-fill {
+            fill: var(--primary);
+            opacity: 0.3;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            padding: 70px 0 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+        }
+
+        .footer-column p, .footer-column ul li {
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-column ul li a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            opacity: 1;
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s;
+            font-size: 1.3rem;
+            border: 1px solid rgba(255,107,0,0.2);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+            border-color: transparent;
+        }
+
+        .copyright {
+            text-align: center;
+            padding: 25px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.95rem;
+            opacity: 0.6;
+        }
+
+        /* ========== ANIMAÇÕES ========== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-up {
+            animation: fadeUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1100px) {
+            .hero-text h1 { font-size: 3.2rem; }
+        }
+
+        @media (max-width: 992px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-text p { margin: 0 auto 30px; }
+            .hero-image { max-width: 500px; margin: 0 auto; }
+            .benefits-content { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding-top: 70px; }
+            .header-container { padding: 10px 0; }
+            .mobile-menu-btn { display: block; }
+            nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: var(--card-bg);
+                backdrop-filter: var(--glass-blur);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transform: translateX(-100%);
+                transition: transform 0.4s;
+                z-index: 100;
+            }
+            nav.active {
+                transform: translateX(0);
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 20px;
+            }
+            nav ul li a {
+                font-size: 1.3rem;
+            }
+            .dropdown-menu {
+                position: static;
+                display: none;
+                background: transparent;
+                backdrop-filter: none;
+                box-shadow: none;
+                border: none;
+                margin-top: 10px;
+            }
+            .dropdown.active .dropdown-menu {
+                display: block;
+            }
+            .lang-btn, .theme-toggle {
+                margin: 0 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="Santiago-TECH.png" alt="SantiagoTECH">
+                SantiagoTECH <span data-i18n="solutions">Soluções em Tecnologia</span>
+            </div>
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="nav-menu">
+                <ul>
+                    <li><a href="index.html" data-i18n="home">Início</a></li>
+                    <li class="dropdown">
+                        <a href="#" id="projetos-link" data-i18n="projects">Projetos <i class="fas fa-chevron-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li class="menu-category" data-i18n="web_systems">Sistemas Web</li>
+                            <li><a href="#" data-i18n="saude_mais">SAUDEMAIS – Gestão Hospitalar</a></li>
+                            <li><a href="#" data-i18n="hospeda_mais">HOSPEDAMAIS – Gestão Hoteleira</a></li>
+                            <li><a href="#" data-i18n="automoto">AutoMotoXweb – Oficina e Auto Peças</a></li>
+                            <li class="menu-divider"></li>
+                            <li class="menu-category" data-i18n="desktop_systems">Sistemas Desktop</li>
+                            <li><a href="#" data-i18n="sica">SICA – Gestão Escolar</a></li>
+                            <li><a href="#" data-i18n="fopag">FOPAG – Folha de Pagamento</a></li>
+                            <li class="menu-divider"></li>
+                            <li class="menu-category" data-i18n="experts">Expert's MT5</li>
+                            <li><a href="#" data-i18n="mytrader">MyTraderTECH – Boleta inteligente</a></li>
+                            <li class="menu-divider"></li>
+                            <li class="menu-category" data-i18n="indicators">Indicadores MT5</li>
+                            <li><a href="#" data-i18n="chartsync">ChartSyncTECH – Sincronia de gráficos</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#solucoes" data-i18n="solutions_menu">Soluções</a></li>
+                    <li><a href="contato.html" data-i18n="contact">Contato</a></li>
+                    <li><a href="solicitacao.html" class="btn" data-i18n="quote">Solicitar Orçamento</a></li>
+                </ul>
+            </nav>
+            <div class="lang-btn">
+                <img src="https://flagcdn.com/w40/br.png" alt="Português" id="current-flag">
+                <div class="lang-dropdown">
+                    <a href="#" data-lang="pt"><img src="https://flagcdn.com/w40/br.png" alt="">Português</a>
+                    <a href="#" data-lang="en"><img src="https://flagcdn.com/w40/us.png" alt="">English</a>
+                    <a href="#" data-lang="es"><img src="https://flagcdn.com/w40/es.png" alt="">Español</a>
+                </div>
+            </div>
+            <button id="theme-toggle" class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-particles"></div>
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1 data-i18n="hero_title">Desenvolvimento de <span>Software Sob Medida</span></h1>
+                <p data-i18n="hero_desc1">Temos vários sistemas prontos e também desenvolvemos qualquer tipo de sistema, expert's e indicadores personalizados.</p>
+                <p data-i18n="hero_desc2">Trabalhamos com as últimas tecnologias: Python/Django, HTML5, CSS, JavaScript, Delphi Nativo, Delphi com UniGUI.</p>
+                <a href="solicitacao.html" class="btn" data-i18n="hero_btn">Solicite uma Demonstração</a>
+            </div>
+            <div class="hero-image">
+                <img src="Santiago-TECH.png" alt="SantiagoTECH">
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="solucoes">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="solutions_title">Nossas Soluções</h2>
+                <p data-i18n="solutions_sub">Conheça alguns dos nossos sistemas prontos ou peça um desenvolvimento exclusivo para o seu negócio.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-hospital"></i></div>
+                    <h3 data-i18n="saude_mais">SAUDEMAIS</h3>
+                    <p data-i18n="saude_desc">Gestão hospitalar completa: prontuário eletrônico, internação, farmácia, faturamento e relatórios.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-hotel"></i></div>
+                    <h3 data-i18n="hospeda_mais">HOSPEDAMAIS</h3>
+                    <p data-i18n="hospeda_desc">Sistema para hotéis e pousadas: reservas, check-in/out, controle de limpeza, financeiro e mais.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-car"></i></div>
+                    <h3 data-i18n="automoto">AutoMotoXweb</h3>
+                    <p data-i18n="automoto_desc">Gestão de oficinas e auto peças: ordens de serviço, estoque, comissões, financeiro e clientes.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-school"></i></div>
+                    <h3 data-i18n="sica">SICA</h3>
+                    <p data-i18n="sica_desc">Sistema de gestão escolar: matrículas, notas, frequência, boletins, comunicação com pais.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-calculator"></i></div>
+                    <h3 data-i18n="fopag">FOPAG</h3>
+                    <p data-i18n="fopag_desc">Folha de pagamento completa: cálculo de salários, impostos, férias, 13º e relatórios.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3 data-i18n="mytrader">MyTraderTECH</h3>
+                    <p data-i18n="mytrader_desc">Expert Advisor para MetaTrader 5: boleta inteligente para automatizar suas operações.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
+                    <h3 data-i18n="chartsync">ChartSyncTECH</h3>
+                    <p data-i18n="chartsync_desc">Indicador MT5 que sincroniza dois gráficos, facilitando análises e operações.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-code"></i></div>
+                    <h3 data-i18n="custom">Desenvolvimento Personalizado</h3>
+                    <p data-i18n="custom_desc">Precisa de algo específico? Criamos sistemas, experts e indicadores sob medida para você.</p>
+                </div>
+            </div>
+            <div class="tech-list">
+                <span class="tech-badge">Python / Django</span>
+                <span class="tech-badge">HTML5 / CSS / JS</span>
+                <span class="tech-badge">Delphi Nativo</span>
+                <span class="tech-badge">Delphi com UniGUI</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="testimonials_title">O Que Nossos Clientes Dizem</h2>
+                <p data-i18n="testimonials_sub">Confira depoimentos de quem já utiliza nossas soluções.</p>
+            </div>
+            <div class="testimonials-container">
+                <div class="testimonials-wrapper" id="testimonials-wrapper">
+                    <div class="testimonials-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content" data-i18n="testimonial1">
+                                "A SantiagoTECH desenvolveu um sistema sob medida para minha oficina. Atendeu todas as necessidades e o suporte é excelente!"
+                            </div>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="João" class="author-avatar">
+                                <div class="author-info">
+                                    <h4 data-i18n="testimonial1_name">João Silva</h4>
+                                    <p data-i18n="testimonial1_company">Oficina AutoCenter</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-content" data-i18n="testimonial2">
+                                "Contratei a criação de um expert para MT5. Ficou perfeito, minha taxa de acertos aumentou muito."
+                            </div>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Maria" class="author-avatar">
+                                <div class="author-info">
+                                    <h4 data-i18n="testimonial2_name">Maria Oliveira</h4>
+                                    <p data-i18n="testimonial2_company">Trader Autônoma</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonials-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content" data-i18n="testimonial3">
+                                "O sistema de gestão escolar SICA simplificou toda a administração da nossa escola. Recomendo!"
+                            </div>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Carlos" class="author-avatar">
+                                <div class="author-info">
+                                    <h4 data-i18n="testimonial3_name">Carlos Eduardo</h4>
+                                    <p data-i18n="testimonial3_company">Colégio Futuro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-content" data-i18n="testimonial4">
+                                "Equipe ágil e competente. Desenvolveram um sistema de folha de pagamento exatamente como precisei."
+                            </div>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/women/63.jpg" alt="Ana" class="author-avatar">
+                                <div class="author-info">
+                                    <h4 data-i18n="testimonial4_name">Ana Paula</h4>
+                                    <p data-i18n="testimonial4_company">RH Solutions</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-controls">
+                    <button class="testimonial-btn" id="prev-btn"><i class="fas fa-chevron-left"></i></button>
+                    <div class="testimonial-indicators">
+                        <button class="indicator active" data-slide="0"></button>
+                        <button class="indicator" data-slide="1"></button>
+                    </div>
+                    <button class="testimonial-btn" id="next-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="benefits">
+        <div class="container benefits-content">
+            <div class="benefits-text">
+                <h2 data-i18n="benefits_title">Por que escolher a SantiagoTECH?</h2>
+                <ul class="benefits-list">
+                    <li><i class="fas fa-check-circle"></i> <span data-i18n="benefit1">Sistemas prontos e testados, ou totalmente personalizados</span></li>
+                    <li><i class="fas fa-check-circle"></i> <span data-i18n="benefit2">Utilizamos as mais modernas tecnologias do mercado</span></li>
+                    <li><i class="fas fa-check-circle"></i> <span data-i18n="benefit3">Suporte técnico especializado e ágil</span></li>
+                    <li><i class="fas fa-check-circle"></i> <span data-i18n="benefit4">Atendimento rápido e soluções que realmente resolvem</span></li>
+                </ul>
+                <a href="solicitacao.html" class="btn" data-i18n="benefits_btn">Solicitar Orçamento</a>
+            </div>
+            <div class="benefits-image">
+                <img src="https://i.ibb.co/ksQ0h4Vv/Backup-Nuvem.png" alt="Tecnologias">
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-wave">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3 data-i18n="footer_about">SantiagoTECH</h3>
+                    <p data-i18n="footer_desc">Desenvolvimento de software sob medida, sistemas prontos e personalizados para web, desktop e MetaTrader 5.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3 data-i18n="footer_links">Links Rápidos</h3>
+                    <ul>
+                        <li><a href="index.html" data-i18n="home">Início</a></li>
+                        <li><a href="#solucoes" data-i18n="solutions_menu">Soluções</a></li>
+                        <li><a href="contato.html" data-i18n="contact">Contato</a></li>
+                        <li><a href="solicitacao.html" data-i18n="quote">Solicitar Orçamento</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3 data-i18n="footer_contact">Contato</h3>
+                    <ul>
+                        <li><i class="fab fa-whatsapp"></i> +55 (99) 9 8444-7141</li>
+                        <li><i class="fas fa-envelope"></i> natal.santiago.tech@gmail.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> <span data-i18n="location">Imperatriz - Maranhão</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 SantiagoTECH. <span data-i18n="rights">Todos os direitos reservados.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ==================== TRADUÇÃO (mesmo código anterior) ====================
+        const translations = {
+            pt: {
+                solutions: "Soluções em Tecnologia",
+                home: "Início",
+                projects: "Projetos",
+                web_systems: "Sistemas Web",
+                saude_mais: "SAUDEMAIS – Gestão Hospitalar",
+                hospeda_mais: "HOSPEDAMAIS – Gestão Hoteleira",
+                automoto: "AutoMotoXweb – Oficina e Auto Peças",
+                desktop_systems: "Sistemas Desktop",
+                sica: "SICA – Gestão Escolar",
+                fopag: "FOPAG – Folha de Pagamento",
+                experts: "Expert's MT5",
+                mytrader: "MyTraderTECH – Boleta inteligente",
+                indicators: "Indicadores MT5",
+                chartsync: "ChartSyncTECH – Sincronia de gráficos",
+                solutions_menu: "Soluções",
+                contact: "Contato",
+                quote: "Solicitar Orçamento",
+                hero_title: "Desenvolvimento de <span>Software Sob Medida</span>",
+                hero_desc1: "Temos vários sistemas prontos e também desenvolvemos qualquer tipo de sistema, expert's e indicadores personalizados.",
+                hero_desc2: "Trabalhamos com as últimas tecnologias: Python/Django, HTML5, CSS, JavaScript, Delphi Nativo, Delphi com UniGUI.",
+                hero_btn: "Solicite uma Demonstração",
+                solutions_title: "Nossas Soluções",
+                solutions_sub: "Conheça alguns dos nossos sistemas prontos ou peça um desenvolvimento exclusivo para o seu negócio.",
+                saude_desc: "Gestão hospitalar completa: prontuário eletrônico, internação, farmácia, faturamento e relatórios.",
+                hospeda_desc: "Sistema para hotéis e pousadas: reservas, check-in/out, controle de limpeza, financeiro e mais.",
+                automoto_desc: "Gestão de oficinas e auto peças: ordens de serviço, estoque, comissões, financeiro e clientes.",
+                sica_desc: "Sistema de gestão escolar: matrículas, notas, frequência, boletins, comunicação com pais.",
+                fopag_desc: "Folha de pagamento completa: cálculo de salários, impostos, férias, 13º e relatórios.",
+                mytrader_desc: "Expert Advisor para MetaTrader 5: boleta inteligente para automatizar suas operações.",
+                chartsync_desc: "Indicador MT5 que sincroniza dois gráficos, facilitando análises e operações.",
+                custom: "Desenvolvimento Personalizado",
+                custom_desc: "Precisa de algo específico? Criamos sistemas, experts e indicadores sob medida para você.",
+                testimonials_title: "O Que Nossos Clientes Dizem",
+                testimonials_sub: "Confira depoimentos de quem já utiliza nossas soluções.",
+                testimonial1: "A SantiagoTECH desenvolveu um sistema sob medida para minha oficina. Atendeu todas as necessidades e o suporte é excelente!",
+                testimonial1_name: "João Silva",
+                testimonial1_company: "Oficina AutoCenter",
+                testimonial2: "Contratei a criação de um expert para MT5. Ficou perfeito, minha taxa de acertos aumentou muito.",
+                testimonial2_name: "Maria Oliveira",
+                testimonial2_company: "Trader Autônoma",
+                testimonial3: "O sistema de gestão escolar SICA simplificou toda a administração da nossa escola. Recomendo!",
+                testimonial3_name: "Carlos Eduardo",
+                testimonial3_company: "Colégio Futuro",
+                testimonial4: "Equipe ágil e competente. Desenvolveram um sistema de folha de pagamento exatamente como precisei.",
+                testimonial4_name: "Ana Paula",
+                testimonial4_company: "RH Solutions",
+                benefits_title: "Por que escolher a SantiagoTECH?",
+                benefit1: "Sistemas prontos e testados, ou totalmente personalizados",
+                benefit2: "Utilizamos as mais modernas tecnologias do mercado",
+                benefit3: "Suporte técnico especializado e ágil",
+                benefit4: "Atendimento rápido e soluções que realmente resolvem",
+                benefits_btn: "Solicitar Orçamento",
+                footer_about: "SantiagoTECH",
+                footer_desc: "Desenvolvimento de software sob medida, sistemas prontos e personalizados para web, desktop e MetaTrader 5.",
+                footer_links: "Links Rápidos",
+                footer_contact: "Contato",
+                location: "Imperatriz - Maranhão",
+                rights: "Todos os direitos reservados."
+            },
+            en: {
+                solutions: "Technology Solutions",
+                home: "Home",
+                projects: "Projects",
+                web_systems: "Web Systems",
+                saude_mais: "SAUDEMAIS – Hospital Management",
+                hospeda_mais: "HOSPEDAMAIS – Hotel Management",
+                automoto: "AutoMotoXweb – Workshop & Auto Parts",
+                desktop_systems: "Desktop Systems",
+                sica: "SICA – School Management",
+                fopag: "FOPAG – Payroll Management",
+                experts: "MT5 Experts",
+                mytrader: "MyTraderTECH – Smart Order",
+                indicators: "MT5 Indicators",
+                chartsync: "ChartSyncTECH – Chart Sync",
+                solutions_menu: "Solutions",
+                contact: "Contact",
+                quote: "Request Quote",
+                hero_title: "Custom <span>Software Development</span>",
+                hero_desc1: "We have several ready-made systems and also develop any type of system, experts and custom indicators.",
+                hero_desc2: "We work with the latest technologies: Python/Django, HTML5, CSS, JavaScript, Native Delphi, Delphi with UniGUI.",
+                hero_btn: "Request a Demo",
+                solutions_title: "Our Solutions",
+                solutions_sub: "Check out some of our ready-made systems or request exclusive development for your business.",
+                saude_desc: "Complete hospital management: electronic medical records, hospitalization, pharmacy, billing and reports.",
+                hospeda_desc: "System for hotels and inns: reservations, check-in/out, cleaning control, financial and more.",
+                automoto_desc: "Workshop and auto parts management: service orders, inventory, commissions, financial and customers.",
+                sica_desc: "School management system: enrollment, grades, attendance, reports, parent communication.",
+                fopag_desc: "Complete payroll: salary calculation, taxes, vacations, 13th salary and reports.",
+                mytrader_desc: "Expert Advisor for MetaTrader 5: smart order to automate your operations.",
+                chartsync_desc: "MT5 indicator that synchronizes two charts, facilitating analysis and operations.",
+                custom: "Custom Development",
+                custom_desc: "Need something specific? We create custom systems, experts and indicators for you.",
+                testimonials_title: "What Our Customers Say",
+                testimonials_sub: "Check out testimonials from those who already use our solutions.",
+                testimonial1: "SantiagoTECH developed a custom system for my workshop. It met all needs and the support is excellent!",
+                testimonial1_name: "John Silva",
+                testimonial1_company: "AutoCenter Workshop",
+                testimonial2: "I hired the creation of an expert for MT5. It was perfect, my hit rate increased a lot.",
+                testimonial2_name: "Mary Oliveira",
+                testimonial2_company: "Independent Trader",
+                testimonial3: "The SICA school management system simplified the entire administration of our school. I recommend it!",
+                testimonial3_name: "Charles Edward",
+                testimonial3_company: "Future School",
+                testimonial4: "Agile and competent team. They developed a payroll system exactly as I needed.",
+                testimonial4_name: "Anne Paula",
+                testimonial4_company: "RH Solutions",
+                benefits_title: "Why choose SantiagoTECH?",
+                benefit1: "Ready-made and tested systems, or fully customized",
+                benefit2: "We use the most modern technologies on the market",
+                benefit3: "Specialized and agile technical support",
+                benefit4: "Fast service and solutions that really work",
+                benefits_btn: "Request Quote",
+                footer_about: "SantiagoTECH",
+                footer_desc: "Custom software development, ready-made and customized systems for web, desktop and MetaTrader 5.",
+                footer_links: "Quick Links",
+                footer_contact: "Contact",
+                location: "Imperatriz - Maranhão, Brazil",
+                rights: "All rights reserved."
+            },
+            es: {
+                solutions: "Soluciones en Tecnología",
+                home: "Inicio",
+                projects: "Proyectos",
+                web_systems: "Sistemas Web",
+                saude_mais: "SAUDEMAIS – Gestión Hospitalaria",
+                hospeda_mais: "HOSPEDAMAIS – Gestión Hotelera",
+                automoto: "AutoMotoXweb – Taller y Autopartes",
+                desktop_systems: "Sistemas Desktop",
+                sica: "SICA – Gestión Escolar",
+                fopag: "FOPAG – Gestión de Nómina",
+                experts: "Expertos MT5",
+                mytrader: "MyTraderTECH – Orden inteligente",
+                indicators: "Indicadores MT5",
+                chartsync: "ChartSyncTECH – Sincronía de gráficos",
+                solutions_menu: "Soluciones",
+                contact: "Contacto",
+                quote: "Solicitar Presupuesto",
+                hero_title: "Desarrollo de <span>Software a Medida</span>",
+                hero_desc1: "Tenemos varios sistemas listos y también desarrollamos cualquier tipo de sistema, expertos e indicadores personalizados.",
+                hero_desc2: "Trabajamos con las últimas tecnologías: Python/Django, HTML5, CSS, JavaScript, Delphi Nativo, Delphi con UniGUI.",
+                hero_btn: "Solicite una Demostración",
+                solutions_title: "Nuestras Soluciones",
+                solutions_sub: "Conozca algunos de nuestros sistemas listos o solicite un desarrollo exclusivo para su negocio.",
+                saude_desc: "Gestión hospitalaria completa: historia clínica electrónica, internación, farmacia, facturación e informes.",
+                hospeda_desc: "Sistema para hoteles y posadas: reservas, check-in/out, control de limpieza, financiero y más.",
+                automoto_desc: "Gestión de talleres y autopartes: órdenes de servicio, inventario, comisiones, finanzas y clientes.",
+                sica_desc: "Sistema de gestión escolar: matrículas, calificaciones, asistencia, boletines, comunicación con padres.",
+                fopag_desc: "Nómina completa: cálculo de salarios, impuestos, vacaciones, aguinaldo e informes.",
+                mytrader_desc: "Asesor Experto para MetaTrader 5: orden inteligente para automatizar sus operaciones.",
+                chartsync_desc: "Indicador MT5 que sincroniza dos gráficos, facilitando análisis y operaciones.",
+                custom: "Desarrollo Personalizado",
+                custom_desc: "¿Necesita algo específico? Creamos sistemas, expertos e indicadores a medida para usted.",
+                testimonials_title: "Lo Que Dicen Nuestros Clientes",
+                testimonials_sub: "Vea testimonios de quienes ya utilizan nuestras soluciones.",
+                testimonial1: "SantiagoTECH desarrolló un sistema a medida para mi taller. ¡Cumplió todas las necesidades y el soporte es excelente!",
+                testimonial1_name: "Juan Silva",
+                testimonial1_company: "Taller AutoCenter",
+                testimonial2: "Contraté la creación de un experto para MT5. Quedó perfecto, mi tasa de aciertos aumentó mucho.",
+                testimonial2_name: "María Oliveira",
+                testimonial2_company: "Trader Independiente",
+                testimonial3: "El sistema de gestión escolar SICA simplificó toda la administración de nuestra escuela. ¡Lo recomiendo!",
+                testimonial3_name: "Carlos Eduardo",
+                testimonial3_company: "Colegio Futuro",
+                testimonial4: "Equipo ágil y competente. Desarrollaron un sistema de nómina exactamente como lo necesitaba.",
+                testimonial4_name: "Ana Paula",
+                testimonial4_company: "RH Solutions",
+                benefits_title: "¿Por qué elegir SantiagoTECH?",
+                benefit1: "Sistemas listos y probados, o totalmente personalizados",
+                benefit2: "Utilizamos las tecnologías más modernas del mercado",
+                benefit3: "Soporte técnico especializado y ágil",
+                benefit4: "Atención rápida y soluciones que realmente funcionan",
+                benefits_btn: "Solicitar Presupuesto",
+                footer_about: "SantiagoTECH",
+                footer_desc: "Desarrollo de software a medida, sistemas listos y personalizados para web, escritorio y MetaTrader 5.",
+                footer_links: "Enlaces Rápidos",
+                footer_contact: "Contacto",
+                location: "Imperatriz - Maranhão, Brasil",
+                rights: "Todos los derechos reservados."
+            }
+        };
+
+        let currentLang = localStorage.getItem('lang') || 'pt';
+        const currentFlag = document.getElementById('current-flag');
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            if (lang === 'pt') currentFlag.src = 'https://flagcdn.com/w40/br.png';
+            else if (lang === 'en') currentFlag.src = 'https://flagcdn.com/w40/us.png';
+            else if (lang === 'es') currentFlag.src = 'https://flagcdn.com/w40/es.png';
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    if (key === 'hero_title') {
+                        el.innerHTML = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+        }
+
+        document.querySelectorAll('.lang-dropdown a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const lang = link.getAttribute('data-lang');
+                setLanguage(lang);
+            });
+        });
+
+        setLanguage(currentLang);
+
+        // ==================== THEME TOGGLE ====================
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const themeIcon = themeToggle.querySelector('i');
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+        themeToggle.addEventListener('click', () => {
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // ==================== MOBILE MENU ====================
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navMenu.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
+
+        const dropdownLinks = document.querySelectorAll('.dropdown > a');
+        dropdownLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    const parent = link.parentElement;
+                    parent.classList.toggle('active');
+                }
+            });
+        });
+
+        // ==================== TESTIMONIALS SLIDER ====================
+        const wrapper = document.getElementById('testimonials-wrapper');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const indicators = document.querySelectorAll('.indicator');
+        let currentSlide = 0;
+        const totalSlides = 2;
+
+        function showSlide(index) {
+            if (index < 0) currentSlide = totalSlides - 1;
+            else if (index >= totalSlides) currentSlide = 0;
+            else currentSlide = index;
+            wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+            indicators.forEach((ind, i) => {
+                ind.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+        nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+        indicators.forEach((ind, i) => {
+            ind.addEventListener('click', () => showSlide(i));
+        });
+
+        setInterval(() => showSlide(currentSlide + 1), 5000);
+
+        // ==================== SMOOTH SCROLL ====================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
